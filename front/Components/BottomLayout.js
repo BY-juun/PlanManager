@@ -1,27 +1,44 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import {BiLogInCircle} from 'react-icons/bi'
+import { styled, makeStyles } from '@material-ui/core/styles';
+
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import HistoryIcon from '@material-ui/icons/History';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import TodayIcon from '@material-ui/icons/Today';
+
+const useStyles = makeStyles({
+  root: {
+    position : "fixed",
+    left : "0px",
+    bottom : "0px",
+    zIndex : 9999,
+    width : "100%",
+  },
+});
 
 const BottomLayout = ()=>{
     const [value, setValue] = React.useState(0);
-  
+    const classes = useStyles();
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
     return (
-      <BottomNavigation
+      <Paper square className={classes.root}>
+      <Tabs
         value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        showLabels
+        onChange={handleChange}
+        variant="fullWidth"
+        indicatorColor="secondary"
+        textColor="secondary"
+        aria-label="icon label tabs example"
       >
-        <BottomNavigationAction label="Pastdd" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Today" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Login" icon={<LocationOnIcon />} />
-      </BottomNavigation>
+        <Tab icon={<HistoryIcon />} label="Past" />
+        <Tab icon={<TodayIcon  />} label="Today" />
+        <Tab icon={<ExitToAppIcon />} label="Login" />  
+      </Tabs>
+    </Paper>
     );
 };
 
