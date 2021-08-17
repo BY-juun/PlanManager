@@ -5,7 +5,8 @@ import BottomLayout from '../Components/BottomLayout';
 import { styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { BiHorizontalCenter } from 'react-icons/bi';
-
+import { useCallback } from 'react';
+import Router from 'next/router';
 
 const MainButton = styled(Button)({
   display: 'block',
@@ -17,6 +18,14 @@ const MainButton = styled(Button)({
 });
 
 export default function Home() {
+
+  const onClickLogin = useCallback(()=>{
+    Router.push('/login');
+  },[])
+  const onClickSignup = useCallback(()=>{
+    Router.push('/signup');
+  },[])
+
   return (
     <>
       <div style = {{marginTop : "200px"}}>
@@ -25,10 +34,10 @@ export default function Home() {
         <img src = "clock.png" style = {{width : "150px"}}></img>
         </div>
         <div>
-          <MainButton variant="outlined" color="secondary" >
+          <MainButton variant="outlined" color="secondary" onClick = {onClickLogin}>
             로그인
-        </MainButton>
-          <MainButton variant="outlined" color="secondary" >
+          </MainButton>
+          <MainButton variant="outlined" color="secondary" onClick = {onClickSignup}>
             회원가입
         </MainButton>
         </div>

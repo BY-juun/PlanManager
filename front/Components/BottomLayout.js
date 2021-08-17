@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useCallback} from 'react';
 import { styled, makeStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import HistoryIcon from '@material-ui/icons/History';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import TodayIcon from '@material-ui/icons/Today';
+import Router from 'next/router';
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,11 @@ const BottomLayout = ()=>{
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const onClickLogin = useCallback(()=>{
+      Router.push('/login');
+    },[])
+  
     return (
       <Paper square className={classes.root}>
       <Tabs
@@ -36,7 +42,7 @@ const BottomLayout = ()=>{
       >
         <Tab icon={<HistoryIcon />} label="Past" />
         <Tab icon={<TodayIcon  />} label="Today" />
-        <Tab icon={<ExitToAppIcon />} label="Login" />  
+        <Tab icon={<ExitToAppIcon />} label="Login" onClick = {onClickLogin}/>  
       </Tabs>
     </Paper>
     );
