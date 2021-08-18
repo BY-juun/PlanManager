@@ -1,7 +1,7 @@
 import produce from '../util/produce';
 
 export const initialState = {
-   
+    me : null,
     signUpLoading : false,
     signUpDone: false,
     signUpError: null,

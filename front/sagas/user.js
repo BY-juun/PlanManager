@@ -57,7 +57,7 @@ function logInAPI(data) {
   }
   
   function signUpAPI(data) {
-    return axios.post('/user', data);
+    return axios.post('/user/signup', data);
   }
   
   function* signUp(action) {
