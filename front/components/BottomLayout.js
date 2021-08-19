@@ -5,7 +5,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HistoryIcon from '@material-ui/icons/History';
 import TodayIcon from '@material-ui/icons/Today';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 const useStyles = makeStyles({
     root: {
         position : "fixed",
@@ -32,7 +32,8 @@ const BottomLayout = () => {
             className={classes.root}
         >
             <BottomNavigationAction label="Past" icon={<HistoryIcon />} />
-            <BottomNavigationAction label="Today" icon={<TodayIcon />} />
+            <BottomNavigationAction label="Today" icon={<AccessAlarmIcon />} />
+            <BottomNavigationAction label="Schedule" icon={<TodayIcon />} />
             <BottomNavigationAction label="Login" icon={<ExitToAppIcon />} /> {/* 나중에 로그인 했으면 logout으로 바꿔줘야한다.*/}
         </BottomNavigation>
     );
