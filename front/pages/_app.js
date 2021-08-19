@@ -1,22 +1,21 @@
 import React from 'react';
-import Head from 'next/head';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
+import Head from 'next/head'; //Head component
+import '../styles.css'
+const planManger = ({ Component }) => {
+    return (
+        <>
+            <Head>
+                <meta charSet="utf-8"></meta>
+                <title>planManger</title>
+            </Head>
+            <Component />
+        </>
+    );
+}
 
-import wrapper from '../store/configureStore';
+planManger.propTypes = {
+    Component: PropTypes.elementType.isRequired,
+}
 
-const PlanManager = ({ Component }) => (
-  <>
-    <Head>
-      <title>NodeBird</title>
-      <link rel="shortcut icon" href="/favicon.ico" />
-    </Head>
-    <Component />
-  </>
-);
-
-PlanManager.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-};
-
-
-export default wrapper.withRedux(PlanManager);
+export default planManger;
