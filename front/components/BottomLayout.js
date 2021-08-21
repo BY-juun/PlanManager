@@ -31,10 +31,10 @@ const BottomLayout = () => {
             showLabels
             className={classes.root}
         >
-            <BottomNavigationAction label="Past" icon={<HistoryIcon />} />
-            <BottomNavigationAction label="Today" icon={<AccessAlarmIcon />} />
-            <BottomNavigationAction label="Schedule" icon={<TodayIcon />} />
-            <BottomNavigationAction label="Login" icon={<ExitToAppIcon />} /> {/* 나중에 로그인 했으면 logout으로 바꿔줘야한다.*/}
+            <BottomNavigationAction label="과거" icon={<HistoryIcon />} />
+            <BottomNavigationAction label="오늘일정" icon={<AccessAlarmIcon />} href = '/Today'/>
+            <BottomNavigationAction label="계획짜기" icon={<TodayIcon />} href = '/Schedule'/>
+            <BottomNavigationAction label="로그인" icon={<ExitToAppIcon />} href = '/login'/> {/* 나중에 로그인 했으면 logout으로 바꿔줘야한다.*/}
         </BottomNavigation>
     );
 };

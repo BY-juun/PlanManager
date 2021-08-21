@@ -31,7 +31,7 @@ const login = () => {
                     <div style={{ marginTop: "15px", marginBottom: "15px" }}>
                         <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }}>
                             Login
-            </Button>
+                        </Button>
                     </div>
                 </form>
                 <div style={{ marginTop: "15px", marginBottom: "15px" }}>
