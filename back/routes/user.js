@@ -2,8 +2,10 @@
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const { User } = require('../models'); 
+const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
+const passport = require('passport');
 
-router.post('/signup',async(req,res,next)=>{
+router.post('/signup',isNotLoggedIn ,async(req,res,next)=>{
     try{
         const user = await User.findOne({
             where : {email : req.body.email}
@@ -33,5 +35,36 @@ router.post('/signup',async(req,res,next)=>{
         next(error);
     }
 });
+
+router.post('/login', isNotLoggedIn ,(req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            console.error(err);
+            return next(err);
+        }
+        if (info) {
+            return res.status(401).send(info.reason);
+        }
+        return req.login(user, async (loginErr) => {
+            if (loginErr) {
+                console.error(loginErr);
+                return next(loginErr);
+            }
+            const fullUserWithoutPassword = await User.findOne({
+                where: { id: user.id },
+                attributes: {
+                    exclude: ['password']
+                },
+            });
+            return res.status(200).json(fullUserWithoutPassword);
+        });
+    })(req, res, next);
+})
+
+router.get('/logout',isLoggedIn ,(req, res, next) => {
+    req.logout();
+    req.session.destroy();
+    res.send('ok');
+})
 
 module.exports = router;

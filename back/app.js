@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const morgan = require('morgan');
 const db = require('./models');
+const passport = require('passport');
+const passportConfig = require('./passport');
 
 const userRouter = require('./routes/user');
 
@@ -19,10 +21,13 @@ db.sequelize.sync()
         console.error(err);
     })
 
+passportConfig();
+
 app.use(cors({
     origin: true,
     credentials: true, //이걸 해줘야 cookie도 같이 보낼 수 있다.
 }));
+
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended : true}));
@@ -37,7 +42,8 @@ app.use(session({
         httpOnly: true, //cookie는 javascript로 조작할 수 없도록.
     }
 }));
-
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/user', userRouter);
 
 app.get('/', (req, res) => {
