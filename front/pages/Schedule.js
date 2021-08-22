@@ -7,18 +7,15 @@ import DateFnsUtils from '@date-io/date-fns';
 import { alpha } from '@material-ui/core/styles';
 import {
     MuiPickersUtilsProvider,
-    KeyboardTimePicker,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useInput from '../hooks/useInput';
 
 const Schedule = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
+    let dateInfo = [new Date().getFullYear(),new Date().getMonth(),new Date().getDate()];
     const [input1,onChangeInput1] = useInput('');
     const [input2,onChangeInput2] = useInput('');
     const [input3,onChangeInput3] = useInput('');
@@ -27,7 +24,11 @@ const Schedule = () => {
 
     const handleDateChange = useCallback((date) => {
         setSelectedDate(date);
-        console.log(date);
+        dateInfo = [];
+        dateInfo.push(date.getFullYear());
+        dateInfo.push(date.getMonth());
+        dateInfo.push(date.getDate());
+        console.log(dateInfo);  //date info 에 2021 7 22 이런식으로 들어간다. 8월이면 7로 들어감.
     },[selectedDate]);
 
 
@@ -37,7 +38,8 @@ const Schedule = () => {
         console.log(input3);
         console.log(input4);
         console.log(input5);
-    },[input1,input2,input3,input4,input5]);
+        console.log(dateInfo);
+    },[input1,input2,input3,input4,input5,dateInfo]);
 
     return (
         <>
