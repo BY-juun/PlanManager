@@ -9,7 +9,7 @@ router.post('/',isLoggedIn,async(req,res,next)=>{
             where : {dayinfo : req.body.dayInfo}
         });
         if(theday){
-            return res.status(403).send("이미 계획을 작성할 날짜입니다.");
+            return res.status(403).send("이미 계획을 작성한 날짜입니다.");
         }
 
         await Day.create({ //await 안넣어주면, 비동기이기 때문에, 뒤에 res.json()이 먼저실행될수도있음.

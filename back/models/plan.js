@@ -1,21 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
     const Plan = sequelize.define('Plan',{
-        title: {
-            type: DataTypes.STRING(30),
+        content: {
+            type: DataTypes.STRING(50),
             allowNull: false, //필수
         },
-        content : {
-            type : DataTypes.TEXT,
-            allowNull : false,
+        starttime: {
+            type: DataTypes.INTEGER,
+            allowNull: true, //필수
         },
-        category: {
-            type: DataTypes.STRING(30),
-            allowNull: false, //필수
+        endtime: {
+            type: DataTypes.INTEGER,
+            allowNull: true, //필수
         },
-        hashTag: {
-            type: DataTypes.STRING(30),
-            allowNull: false, //필수
-        },
+        totaltime : {
+            type: DataTypes.INTEGER,
+            allowNull: true, //필수
+        }
     },{
         charset : 'utf8mb4',
         collate : 'utf8mb4_general_ci',//한글 + 이모티콘

@@ -10,6 +10,7 @@ const passportConfig = require('./passport');
 
 const userRouter = require('./routes/user');
 const dayRouter = require('./routes/day');
+const planRouter = require('./routes/plan');
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/user', userRouter);
 app.use('/day', dayRouter);
+app.use('/plan', planRouter);
+
 
 app.get('/', (req, res) => {
     res.send("Plan Manager");

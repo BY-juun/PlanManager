@@ -17,6 +17,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import useInput from '../hooks/useInput';
 import wrapper from "../store/configureStore";
@@ -107,6 +108,10 @@ const Schedule = () => {
         setCountList(countArr);
     },[countList])
 
+    const submitPlanComplete = useCallback(()=>{
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    },[activeStep]);
+
     return (
         <>
             <TopLayout></TopLayout>
@@ -149,8 +154,20 @@ const Schedule = () => {
                     <IconButton color="secondary" aria-label="remove plan" onClick= {removeInput}>
                         <RemoveCircleIcon />
                     </IconButton>
-                    {countList.map((value,index)=><PlanForm key = {index}/>)}
+                    {countList.map((value,index)=><PlanForm key = {index} dayInfo = {dayInfo}/>)}
+                    <div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        startIcon={<SaveIcon />}
+                        onClick = {submitPlanComplete}
+                    >등록완료</Button>
+                    </div>
                 </>
+                }
+                {activeStep === 2 &&
+                    <div>등록이 완료되었습니다.</div>
                 }
                 
             </div>
