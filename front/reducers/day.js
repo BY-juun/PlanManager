@@ -1,15 +1,22 @@
 import produce from '../util/produce';
 export const initialState = {
-
-    addDayLoading: false, // 로그인 시도중
+    todayPlan : null,
+    addDayLoading: false,
     addDayDone: false,
     addDayError: null,
+    loadTodayLoading: false, // 로그인 시도중
+    loadTodayDone: false,
+    loadTodayError: null,
 }
 
 
 export const ADD_DAY_REQUEST = 'ADD_DAY_REQUEST';
 export const ADD_DAY_SUCCESS = 'ADD_DAY_SUCCESS';
 export const ADD_DAY_FAILURE = 'ADD_DAY_FAILURE';
+
+export const LOAD_TODAY_REQUEST = 'LOAD_TODAY_REQUEST';
+export const LOAD_TODAY_SUCCESS = 'LOAD_TODAY_SUCCESS';
+export const LOAD_TODAY_FAILURE = 'LOAD_TODAY_FAILURE';
 
 const reducer = (state = initialState, action) =>
     produce(state, (draft) => {
@@ -27,6 +34,22 @@ const reducer = (state = initialState, action) =>
                 draft.addDayLoading = false;
                 draft.addDayError = action.error;
                 break;
+
+            case LOAD_TODAY_REQUEST:
+                draft.loadTodayLoading = true;
+                draft.loadTodayError = null;
+                draft.loadTodayDone = false;
+                break;
+            case LOAD_TODAY_SUCCESS:
+                draft.loadTodayLoading = false;
+                draft.loadTodayDone = true;
+                draft.todayPlan = action.data;
+                break;
+            case LOAD_TODAY_FAILURE:
+                draft.loadTodayLoading = false;
+                draft.loadTodayError = action.error;
+                break;
+
             default:
                 break;
         }

@@ -7,7 +7,6 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import useInput from '../hooks/useInput';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,15 +14,20 @@ const useStyles = makeStyles((theme) => ({
         marginLeft : "80px",
     },
     timepicker : {
-        width : "180px",
+        width : "160px",
         marginLeft : "10px",
         marginRight : "10px",
     },
     button : {
         float : "right",
+        marginTop : "10px",
+        border: "none",
     },
     chip : {
         marginLeft : "80px",
+    },
+    mainWrapper : {
+        border : "1px solid grey" , marginTop : "15px", marginLeft : "15px", marginRight : "15px"
     }
   }));
 
@@ -52,9 +56,9 @@ const ScheduleList = ({value,index}) => {
     },[startTime,endTime])
     return (
         <>
-                    <div style = {{border : "1px solid grey" , marginTop : "15px", marginLeft : "15px", marginRight : "15px"}}>
+                    <div className = {classes.mainWrapper}>
                         <Chip label={value} className = {classes.root} variant="outlined" />
-                        <Button variant="outlined" color="primary" className = {classes.button} onClick = {submitTime}>제출하기</Button>
+                        <Button variant="outlined" color="primary" className = {classes.button} onClick = {submitTime}>제출</Button>
                         <div>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardTimePicker

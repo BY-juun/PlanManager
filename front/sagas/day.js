@@ -6,6 +6,9 @@ import {
     ADD_DAY_FAILURE,
     ADD_DAY_REQUEST,
     ADD_DAY_SUCCESS,
+    LOAD_TODAY_FAILURE,
+    LOAD_TODAY_REQUEST,
+    LOAD_TODAY_SUCCESS,
 
 } from '../reducers/day';
 
@@ -29,11 +32,38 @@ function* addday(action) {
     }
 }
 
+function loadTodayAPI(data) {
+    return axios.get('/day/today'); //data.dateInfo
+}
+
+function* loadToday(action) {
+    try {
+        const result = yield call(loadTodayAPI, action.data);
+        yield put({
+            type: LOAD_TODAY_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: LOAD_TODAY_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
+
 function* watchAddDay() {
     yield takeLatest(ADD_DAY_REQUEST, addday);
 }
+
+function* watchLoadToday() {
+    yield takeLatest(LOAD_TODAY_REQUEST, loadToday);
+}
+
 export default function* daySaga() {
     yield all([
         fork(watchAddDay),
+        fork(watchLoadToday),
     ]);
 }

@@ -9,6 +9,7 @@ import { END } from 'redux-saga';
 import axios from 'axios';
 import {  useSelector } from 'react-redux';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import { LOAD_TODAY_REQUEST } from '../reducers/day';
 import Router from 'next/router';
 
 
@@ -24,7 +25,8 @@ const Today = () => {
     const {User} = useSelector((state)=>state.user); 
     const classes = useStyles();
     const today = new Date();
-    const scheduleArr = ["수업듣고 과제하기", "블로그 글 2개 이상 쓰기", "plan Manager Today page 만들기","plan Manager Redux, Saga 구조잡기", "운동하기"];
+    const {todayPlan} = useSelector((state)=>state.day);
+    const scheduleArr = todayPlan?.Plans;
     const dayinfo = String(today.getFullYear())+ " " + String(today.getMonth()+1)+ " " + String(today.getDate()) ;
     useEffect(()=>{
         if(!User){
@@ -38,8 +40,8 @@ const Today = () => {
             <div className = {classes.TodayWrapper}>
                 <h2>오늘의 일정!</h2>
                 <Chip label={dayinfo}   color="primary" variant="outlined" />
-                {scheduleArr.map((value,index)=>
-                    <ScheduleList value = {value} index = {index} key = {index}/>
+                {scheduleArr && scheduleArr.map((value,index)=>
+                    <ScheduleList value = {value.content} index = {index} key = {index}/>
                 )}
             </div>
             <BottomLayout></BottomLayout>
@@ -57,6 +59,9 @@ async ({req,res}) => {
     }
     store.dispatch({
       type : LOAD_MY_INFO_REQUEST,
+    })
+    store.dispatch({
+      type : LOAD_TODAY_REQUEST,
     })
     store.dispatch(END);
     await store.sagaTask.toPromise();
