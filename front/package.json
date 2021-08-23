@@ -16,6 +16,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@next/bundle-analyzer": "^11.1.0",
     "axios": "^0.21.1",
+    "babel-plugin-styled-components": "^1.13.2",
     "cors": "^2.8.5",
     "date-fns": "^2.23.0",
     "immer": "^9.0.5",

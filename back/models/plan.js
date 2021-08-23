@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Plan.associate = (db) => {
-        db.Plan.belongsTo(db.User);
+        db.Plan.belongsTo(db.Day);
     };
     return Plan;
 }

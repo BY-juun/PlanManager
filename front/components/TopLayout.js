@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     textAlign : "center",
   },
+  mainTitle : {
+    textDecoration : "none", color : "white"
+  }
 }));
 
 export default function ButtonAppBar() {
@@ -24,7 +27,7 @@ export default function ButtonAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link href = "/"><a style={{textDecoration : "none", color : "white"}}>PlanManager</a></Link>
+            <Link href = "/"><a className = {classes.mainTitle}>PlanManager</a></Link>
           </Typography>
         </Toolbar>
       </AppBar>

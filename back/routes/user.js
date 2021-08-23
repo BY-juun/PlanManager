@@ -1,9 +1,34 @@
- const express = require('express');
+const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const { User } = require('../models'); 
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const passport = require('passport');
+
+router.get('/',async(req,res,next)=>{ //loadmyinfo
+    try{
+        if(req.user) //새로고침해도 로그인 유지되도록
+        {
+            const user = await User.findOne({
+                where : {id : req.user.id}
+            });
+            const fullUserWithoutPassword = await User.findOne({
+                where : {id : user.id},
+                attributes : {
+                    exclude : ['password']
+                },
+            });
+            return res.status(200).json(fullUserWithoutPassword);
+        }else {
+            res.status(200).json(null);
+        }
+        
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+    
+})
 
 router.post('/signup',isNotLoggedIn ,async(req,res,next)=>{
     try{
@@ -66,5 +91,7 @@ router.get('/logout',isLoggedIn ,(req, res, next) => {
     req.session.destroy();
     res.send('ok');
 })
+
+
 
 module.exports = router;

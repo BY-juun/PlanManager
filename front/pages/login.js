@@ -6,42 +6,68 @@ import { makeStyles } from '@material-ui/core/styles';
 import useInput from '../hooks/useInput';
 import React, { useCallback, useEffect } from 'react';
 import { RiKakaoTalkLine } from 'react-icons/ri';
-import { AiOutlineFacebook } from 'react-icons/ai';
+import { AiOutlineFacebook, AiOutlineGoogle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
 import { LOG_IN_REQUEST } from '../reducers/user';
 
+const useStyles = makeStyles((theme) => ({
+    mainWrapper: {
+        textAlign: "center",
+        marginTop: "150px",
+    },
+    wrapper: {
+        marginTop: "15px",
+        marginBottom: "15px",
+    },
+    inputWrapper: {
+        marginTop: "17px",
+        marginBottom: "15px"
+    },
+    inputField: {
+        width: "200px"
+    },
+
+}));
+
+
 const login = () => {
-    const [email, onChangeEmail,setEmail] = useInput('');
-    const [password, onChangePassword,setPassword] = useInput('');
+    const [email, onChangeEmail, setEmail] = useInput('');
+    const [password, onChangePassword, setPassword] = useInput('');
     const dispatch = useDispatch();
-    const {User, logInDone, logInError} = useSelector((state)=>state.user); 
+    const classes = useStyles();
+    const { User, logInDone, logInError } = useSelector((state) => state.user);
     const nickname = User?.nickname;
-    useEffect(()=>{
-        if(logInError)
-        {
+    useEffect(() => {
+        if (logInError) {
             alert(logInError);
             setEmail('');
             setPassword('');
         }
-    },[logInError]);
+    }, [logInError]);
 
-    useEffect(()=>{
-        if(logInDone)
-        {
+    useEffect(() => {
+        if (logInDone) {
             alert("환영합니다!" + nickname);
-            setTimeout(()=>{
-                Router.push('/');
-            },1000)
+            Router.push('/');
+
         }
-    },[logInDone]);
+    }, [logInDone]);
+
+    useEffect(() => {
+        if (User) {
+            setTimeout(() => {
+                Router.push('/');
+            }, 1000)
+        }
+    }, [User])
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
         return dispatch({
-            type : LOG_IN_REQUEST,
-            data : {
-                email,password
+            type: LOG_IN_REQUEST,
+            data: {
+                email, password
             }
         })
     }, [email, password])
@@ -49,31 +75,36 @@ const login = () => {
     return (
         <>
             <TopLayout></TopLayout>
-            <div style={{ textAlign: "center", marginTop: "120px" }}>
+            <div className = {classes.mainWrapper}>
                 <form onSubmit={onSubmitForm}>
-                    <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                        <TextField label="Email" value={email} onChange={onChangeEmail} style={{ width: "200px" }}></TextField>
+                    <div className = {classes.wrapper}>
+                        <TextField label="Email" value={email} onChange={onChangeEmail} className = {classes.inputField}></TextField>
                     </div>
-                    <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                        <TextField label="Password" type="password" value={password} onChange={onChangePassword} style={{ width: "200px" }}></TextField>
+                    <div className = {classes.wrapper}>
+                        <TextField label="Password" type="password" value={password} onChange={onChangePassword} className = {classes.inputField}></TextField>
                     </div>
-                    <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                        <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }}>
+                    <div className = {classes.wrapper}>
+                        <Button variant="outlined" size="medium" color="primary" type="submit" className = {classes.inputField}>
                             Login
                         </Button>
                     </div>
                 </form>
-                <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                    <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }} startIcon={<RiKakaoTalkLine />}>
-                        카카오톡 로그인
-                    </Button>
+                    <div className={classes.inputWrapper}>
+                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
+                            카카오톡 회원가입
+                        </Button>
+                    </div>
+                    <div sclassName={classes.inputWrapper}>
+                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
+                            페이스북 회원가입
+                        </Button>
+                    </div>
+                    <div className={classes.inputWrapper}>
+                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
+                            구글 회원가입
+                         </Button>
+                    </div>
                 </div>
-                <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-                    <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }} startIcon={<AiOutlineFacebook />}>
-                        페이스북 로그인
-                    </Button>
-                </div>
-            </div>
             <BottomLayout></BottomLayout>
         </>
     );

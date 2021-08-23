@@ -8,6 +8,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 db.Plan = require('./plan')(sequelize,Sequelize);
 db.User = require('./user')(sequelize,Sequelize);
+db.Day = require('./day')(sequelize,Sequelize);
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

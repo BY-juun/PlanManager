@@ -1,79 +1,178 @@
 import TopLayout from '../components/TopLayout';
 import BottomLayout from '../components/BottomLayout';
 import 'date-fns';
-import React, { useCallback, useState } from 'react';
+import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import { ADD_DAY_REQUEST } from '../reducers/day';
+import React, { useCallback, useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
-import { alpha } from '@material-ui/core/styles';
+import { alpha,makeStyles } from '@material-ui/core/styles';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
-import TextField from '@material-ui/core/TextField';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import Button from '@material-ui/core/Button';
 import useInput from '../hooks/useInput';
+import wrapper from "../store/configureStore";
+import { END } from 'redux-saga';
+import axios from 'axios';
+import {  useSelector, useDispatch } from 'react-redux';
+import Router from 'next/router';
+import PlanForm from '../components/PlanForm';
+
+const useStyles = makeStyles((theme) => ({
+    textField : {
+        marginBottom : "15px", marginTop : "5px"
+    },
+    finishButton : {
+        marginTop:"20px"
+    },
+    mainWrapper : {
+        textAlign : "center", marginTop : "40px"
+    },
+    selectDate : {
+        marginTop : "100px"
+    }
+  }));
+
+const getSteps = () =>{
+    return ['날짜 설정하기', '계획 설정하기', '설정 완료'];
+}
+  
 
 const Schedule = () => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    let dateInfo = [new Date().getFullYear(),new Date().getMonth(),new Date().getDate()];
-    const [input1,onChangeInput1] = useInput('');
-    const [input2,onChangeInput2] = useInput('');
-    const [input3,onChangeInput3] = useInput('');
-    const [input4,onChangeInput4] = useInput('');
-    const [input5,onChangeInput5] = useInput('');
+    let dayInfo = String(new Date().getFullYear())+String(new Date().getMonth()+1)+String(new Date().getDate());
+    const [countList, setCountList] = useState([]);
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
+
+    const {User} = useSelector((state)=>state.user); 
+    const {addDayDone,addDayError, addDayLoading} = useSelector((state)=>state.day); 
+    useEffect(()=>{
+        if(!User){
+            alert("로그인 후 이용가능합니다");
+            Router.push('/');
+        }
+    },[User])
+
+    useEffect(()=>{
+        if(addDayDone){
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
+    },[addDayDone])
+
+    useEffect(()=>{
+        if(addDayError){
+            alert(addDayError);
+        }
+    },[addDayError])
 
     const handleDateChange = useCallback((date) => {
         setSelectedDate(date);
-        dateInfo = [];
-        dateInfo.push(date.getFullYear());
-        dateInfo.push(date.getMonth());
-        dateInfo.push(date.getDate());
-        console.log(dateInfo);  //date info 에 2021 7 22 이런식으로 들어간다. 8월이면 7로 들어감.
+        dayInfo = String(date.getFullYear())+String(date.getMonth()+1)+String(date.getDate());
+        console.log(dayInfo);  //date info 에 2021 7 22 이런식으로 들어간다. 8월이면 7로 들어감.
     },[selectedDate]);
+    
+    const submitDate = useCallback(()=>{
+        return dispatch({
+            type : ADD_DAY_REQUEST,
+            data : {
+                dayInfo
+            }
+        })
+    },[dayInfo])
 
 
-    const onClickSubmit = useCallback(()=>{
-        console.log(input1);
-        console.log(input2);
-        console.log(input3);
-        console.log(input4);
-        console.log(input5);
-        console.log(dateInfo);
-    },[input1,input2,input3,input4,input5,dateInfo]);
+    const addInput = useCallback(()=>{
+        let countArr = [...countList]
+        let counter = countArr.slice(-1)[0]
+        counter += 1
+        countArr.push(counter)	// index 사용 X
+        // countArr[counter] = counter	// index 사용 시 윗줄 대신 사용	
+        setCountList(countArr)
+    },[countList])
+
+    const removeInput = useCallback(()=>{
+        let countArr = [...countList]
+        countArr.pop();
+        setCountList(countArr);
+    },[countList])
 
     return (
         <>
             <TopLayout></TopLayout>
-            <div style = {{textAlign : "center", marginTop : "60px"}}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justifyContent="space-around">
-                    <KeyboardDatePicker
-                        margin="normal"
-                        id="date-picker-dialog"
-                        label="날짜 선택"
-                        format="MM/dd/yyyy"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                    </Grid>
-                </MuiPickersUtilsProvider>
-                <div><TextField label="일정1" style = {{marginBottom : "15px", marginTop : "5px"}} value = {input1} onChange = {onChangeInput1}></TextField></div>
-                <div><TextField label="일정2" style = {{marginBottom : "15px", marginTop : "5px"}} value = {input2} onChange = {onChangeInput2}></TextField></div>
-                <div><TextField label="일정3" style = {{marginBottom : "15px", marginTop : "5px"}} value = {input3} onChange = {onChangeInput3}></TextField></div>
-                <div><TextField label="일정4" style = {{marginBottom : "15px", marginTop : "5px"}} value = {input4} onChange = {onChangeInput4}></TextField></div>
-                <div><TextField label="일정5" style = {{marginBottom : "15px", marginTop : "5px"}} value = {input5} onChange = {onChangeInput5}></TextField></div>
-                <div>
-                <Button variant="outlined" color="primary" style = {{marginTop:"10px"}} onClick = {onClickSubmit}>
-                    설정 완료
-                </Button>
-                </div>
+            <div className = {classes.mainWrapper}>
+                <Stepper activeStep={activeStep} alternativeLabel>
+                    {steps.map((label) => (
+                    <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                    ))}
+                </Stepper>
+                {activeStep === 0 &&  //1단계일 때,
+                    <div className = {classes.selectDate}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container justifyContent="space-around">
+                        <KeyboardDatePicker
+                            margin="normal"
+                            id="date-picker-dialog"
+                            label="날짜 선택"
+                            format="MM/dd/yyyy"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                        </Grid>
+                    </MuiPickersUtilsProvider>
+                    <div>
+                        <Button variant="outlined" color="primary" className = {classes.finishButton} onClick = {submitDate} onLoad = {addDayLoading}>
+                            설정 완료
+                        </Button>
+                    </div>
+                </div>}
+                {activeStep === 1 && 
+                <>
+                    <IconButton color="primary" aria-label="add plan" onClick = {addInput}>
+                        <AddCircleIcon />
+                    </IconButton>
+                    <IconButton color="secondary" aria-label="remove plan" onClick= {removeInput}>
+                        <RemoveCircleIcon />
+                    </IconButton>
+                    {countList.map((value,index)=><PlanForm key = {index}/>)}
+                </>
+                }
+                
             </div>
             <BottomLayout></BottomLayout>
         </>
     );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store)=>
+async ({req,res}) => {
+    const cookie = req ? req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if(req && cookie){
+      axios.defaults.headers.Cookie = cookie;
+    }
+    store.dispatch({
+      type : LOAD_MY_INFO_REQUEST,
+    })
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+  });
+  
+
 
 export default Schedule;

@@ -7,14 +7,33 @@ import useInput from '../hooks/useInput';
 import React, { useCallback, useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {RiKakaoTalkLine} from 'react-icons/ri';
-import {AiOutlineFacebook} from 'react-icons/ai';
+import {AiOutlineFacebook,AiOutlineGoogle} from 'react-icons/ai';
 import Router from 'next/router';
-import { SIGN_UP_REQUEST } from '../reducers/user';
+import { SIGN_UP_REQUEST,LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import wrapper from "../store/configureStore";
+import { END } from 'redux-saga';
+import axios from 'axios';
+import { red } from '@material-ui/core/colors';
+
 const useStyles = makeStyles((theme) => ({
+  mainWrapper : {
+    textAlign: "center", 
+    marginTop: "100px",
+  },
   wrapper: {
     marginTop: "15px",
     marginBottom: "15px",
   },
+  inputWrapper : {
+    marginTop: "17px", 
+    marginBottom: "15px"
+  },
+  inputField : {
+    width: "200px"
+  },
+  warningMessage : {
+    color : red,
+  }
 }));
 
 const signup = () => {
@@ -26,14 +45,12 @@ const signup = () => {
   const [passwordError, setPasswordError] = useState(false);
 
   const {User, signUpDone, signUpError} = useSelector((state)=>state.user);
-
+  const classes = useStyles();
   useEffect(()=>{
     if(signUpDone)
     {
       alert("회원가입이 완료되었습니다. 메인화면으로 돌아갑니다");
-      setTimeout(()=>{
-        Router.push('/');
-      },1000)
+      Router.push('/');
     }
   },[signUpDone])
 
@@ -41,9 +58,7 @@ const signup = () => {
     if(User)
     {
       alert("이미 로그인한 회원은 회원가입을 할 수 없습니다. 메인화면으로 돌아갑니다");
-      setTimeout(()=>{
-        Router.push('/');
-      },1000)
+      Router.push('/');
     }
   },[User]);
 
@@ -83,35 +98,40 @@ const signup = () => {
   return (
     <>
       <TopLayout></TopLayout>
-      <div style={{ textAlign: "center", marginTop: "80px" }}>
+      <div className={classes.mainWrapper}>
         <form onSubmit={onSubmitForm}>
-          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-            <TextField label="Email" value={email} required onChange={onChangeEmail} style={{ width: "200px" }}></TextField>
+          <div className = {classes.inputWrapper}>
+            <TextField label="Email" value={email} required onChange={onChangeEmail} className = {classes.inputField}></TextField>
           </div>
-          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-            <TextField label="Nickname" value={nickname}  required onChange={onChangeNickname} style={{ width: "200px" }}></TextField>
+          <div className = {classes.inputWrapper}>
+            <TextField label="Nickname" value={nickname}  required onChange={onChangeNickname} className = {classes.inputField}></TextField>
           </div>
-          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-            <TextField label="Password" type="password" value={password} required onChange={onChangePassword} style={{ width: "200px" }}></TextField>
+          <div className = {classes.inputWrapper}>
+            <TextField label="Password" type="password" value={password} required onChange={onChangePassword} className = {classes.inputField}></TextField>
           </div>
-          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-            <TextField label="PasswordCheck" type="password" value={passwordCheck} required onChange={onChangePasswordCheck} style={{ width: "200px" }}></TextField>
+          <div className = {classes.inputWrapper}>
+            <TextField label="PasswordCheck" type="password" value={passwordCheck} required onChange={onChangePasswordCheck} className = {classes.inputField}></TextField>
           </div>
-          {passwordError && <div style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>}
-          <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }}>
+          {passwordError && <div className = {classes.warningMessage}>비밀번호가 일치하지 않습니다.</div>}
+          <div className = {classes.inputWrapper}>
+            <Button variant="outlined" size="medium" color="primary" type="submit" className = {classes.inputField}>
               SignUp
             </Button>
           </div>
         </form>
-        <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-          <Button variant="outlined" size="medium" color="primary" type="submit" style={{ width: "200px" }} startIcon = {<RiKakaoTalkLine/>}>
+        <div className = {classes.inputWrapper}>
+          <Button variant="outlined" size="medium" color="primary" type="submit" className = {classes.inputField} startIcon = {<RiKakaoTalkLine/>}>
             카카오톡 회원가입
             </Button>
         </div>
-        <div style={{ marginTop: "15px", marginBottom: "15px" }}>
-          <Button variant="outlined" size="medium" color="primary" type = "submit" style={{ width: "200px" }} startIcon = {<AiOutlineFacebook/>}>
+        <div sclassName = {classes.inputWrapper}>
+          <Button variant="outlined" size="medium" color="primary" type = "submit" className = {classes.inputField} startIcon = {<AiOutlineFacebook/>}>
             페이스북 회원가입
+            </Button>
+        </div>
+        <div className = {classes.inputWrapper}>
+          <Button variant="outlined" size="medium" color="primary" type = "submit" className = {classes.inputField} startIcon = {<AiOutlineGoogle/>}>
+            구글 회원가입
             </Button>
         </div>
 
@@ -120,5 +140,21 @@ const signup = () => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store)=>
+async ({req,res}) => {
+    //원래 브라우저에서 cookie를 알아서 넣어주는데 , SSR시에는 브라우저 개입을 못하니까 프론트서버에서 헤더에 쿠키를 넣어서 보내줘야 한다.
+    const cookie = req ? req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if(req && cookie){
+      axios.defaults.headers.Cookie = cookie;
+    }
+    store.dispatch({
+      type : LOAD_MY_INFO_REQUEST,
+    })
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+  });
+  
 
 export default signup;
