@@ -30,7 +30,7 @@ function* submitPlan(action) {
     } catch (err) {
         console.error(err);
         yield put({
-            type: SUBMIT_TIME_FAILURE,
+            type: SUBMIT_PLAN_FAILURE,
             error: err.response.data,
         });
     }
@@ -42,18 +42,15 @@ function submitTimeAPI(data) {
 
 function* submitTime(action) {
     try {
-        const result = yield call(submitTimeAPI, action.data);
+        yield call(submitTimeAPI, action.data);
         yield put({
             type: SUBMIT_TIME_SUCCESS,
         });
-        yield put({
-            type: SUBMIT_TODAY_PLAN_SUCCESS,
-            data : result.data,
-        });
+
     } catch (err) {
         console.error(err);
         yield put({
-            type: SUBMIT_PLAN_FAILURE,
+            type: SUBMIT_TIME_FAILURE,
             error: err.response.data,
         });
     }

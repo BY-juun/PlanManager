@@ -3,6 +3,8 @@ const router = express.Router();
 const { Day } = require('../models'); 
 const { Plan } = require('../models'); 
 const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op; 
 
 router.post('/',isLoggedIn,async(req,res,next)=>{
     try{
@@ -26,9 +28,26 @@ router.post('/',isLoggedIn,async(req,res,next)=>{
 
 router.get('/today',isLoggedIn,async(req,res,next)=>{
     try{
-        const today = String(new Date().getFullYear())+String(new Date().getMonth()+1)+String(new Date().getDate());
+        let today;
+        if (new Date().getMonth() + 1 < 10) {
+            if(new Date().getDate()<10){
+                today = (String(date.getFullYear()) + "0" + String(date.getMonth() + 1) + "0" +String(date.getDate()))
+            }else{
+                today = (String(date.getFullYear()) + "0" + String(date.getMonth() + 1) + String(date.getDate()))
+            }
+           
+        } else {
+            if(new Date().getDate()<10){
+                today = (String(date.getFullYear()) + String(date.getMonth() + 1) + "0" +String(date.getDate()))
+            }else{
+                today = (String(date.getFullYear()) + String(date.getMonth() + 1) + String(date.getDate()))
+            }
+        }
+        
         const todayPlan = await Day.findOne({
-            where : {dayinfo : today}
+            where : {
+                dayinfo : today
+            }
         })
         if(!todayPlan){
             return res.status(403).send("아직 오늘 계획이 없습니다");
@@ -49,5 +68,31 @@ router.get('/today',isLoggedIn,async(req,res,next)=>{
         next(error);
     }
 });
+
+
+router.get('/past',isLoggedIn,async(req,res,next)=>{
+    try{
+        const PastPlan = await Day.findAll({
+            where : {
+                dayinfo : {[Op.gt] : req.body.FromdayInfo, [Op.lt] : req.body.TodaydayInfo},
+            },
+            include : [{
+                model : Plan,
+                attributes : {
+                    exclude : ['createdAt','updatedAt']
+                },
+            }]
+        })
+        if(!PastPlan){
+            return res.status(403).send("그 기간의 계획이 없습니다.");
+        }
+
+        res.status(201).json(PastPlan);
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+});
+
 
 module.exports = router;

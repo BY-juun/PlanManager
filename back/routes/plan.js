@@ -14,14 +14,14 @@ router.post('/time',isLoggedIn,async(req,res,next)=>{
             return res.status(403).send("존재하지 않는 계획입니다.");
         }
         
-        const updatePlan = await Plan.update({
+        await Plan.update({
             starttime : req.body.startTime,
             endtime : req.body.endTime,
             totaltime : req.body.totaltime,
         },{
             where : {id : req.body.id}
         })
-        return res.status(201).json(updatePlan);
+        return res.status(201).send('ok');
     }catch(error){
         console.error(error);
         next(error);

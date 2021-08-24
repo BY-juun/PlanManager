@@ -39,7 +39,7 @@ const BottomLayout = () => {
             showLabels
             className={classes.root}
         >
-            <BottomNavigationAction label="과거" icon={<HistoryIcon />} />
+            <BottomNavigationAction label="과거" icon={<HistoryIcon />} href = '/past'/>
             <BottomNavigationAction label="오늘일정" icon={<AccessAlarmIcon />} href = '/Today'/>
             <BottomNavigationAction label="계획짜기" icon={<TodayIcon />} href = '/Schedule'/>
             {!User && <BottomNavigationAction label="로그인" icon={<ExitToAppIcon />} href = '/login'/>}

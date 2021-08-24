@@ -1,12 +1,16 @@
 import produce from '../util/produce';
 export const initialState = {
-    todayPlan : null,
+    todayPlan: null,
+    pastPlan : null,
     addDayLoading: false,
     addDayDone: false,
     addDayError: null,
-    loadTodayLoading: false, // 로그인 시도중
+    loadTodayLoading: false,
     loadTodayDone: false,
     loadTodayError: null,
+    loadPastLoading: false,
+    loadPastDone: false,
+    loadPastError: null,
 }
 
 
@@ -17,6 +21,10 @@ export const ADD_DAY_FAILURE = 'ADD_DAY_FAILURE';
 export const LOAD_TODAY_REQUEST = 'LOAD_TODAY_REQUEST';
 export const LOAD_TODAY_SUCCESS = 'LOAD_TODAY_SUCCESS';
 export const LOAD_TODAY_FAILURE = 'LOAD_TODAY_FAILURE';
+
+export const LOAD_PAST_REQUEST = 'LOAD_PAST_REQUEST';
+export const LOAD_PAST_SUCCESS = 'LOAD_PAST_SUCCESS';
+export const LOAD_PAST_FAILURE = 'LOAD_PAST_FAILURE';
 
 export const SUBMIT_TODAY_PLAN_SUCCESS = 'SUBMIT_TODAY_PLAN_SUCCESS';
 
@@ -51,13 +59,22 @@ const reducer = (state = initialState, action) =>
                 draft.loadTodayLoading = false;
                 draft.loadTodayError = action.error;
                 break;
-            case SUBMIT_TODAY_PLAN_SUCCESS:{
-                const submitplan = draft.todayPlan.Plans.find((v)=>v.id === action.data.id);
-                submitplan.starttime = action.data.starttime;
-                submitplan.endtime = action.data.endtime;
-                submitplan.totaltime = action.data.totaltime;
+
+            case LOAD_PAST_REQUEST:
+                draft.loadPastLoading = true;
+                draft.loadPastError = null;
+                draft.loadPastDone = false;
                 break;
-                }
+            case LOAD_PAST_SUCCESS:
+                draft.loadPastLoading = false;
+                draft.loadPastDone = true;
+                draft.pastPlan = action.data;
+                break;
+            case LOAD_PAST_FAILURE:
+                draft.loadPastLoading = false;
+                draft.loadPastError = action.error;
+                break;
+
             default:
                 break;
         }

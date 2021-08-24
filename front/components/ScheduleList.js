@@ -48,6 +48,7 @@ const ScheduleList = ({value,id,PropStartTime,PropEndTime,PropTotalTime}) => {
     const [endTime , setEndTime] = useState(PropEndTime);
     
 
+
     const onChangeStartTime = useCallback((date) => {
         setStartTime(date);
     },[startTime]);
@@ -58,9 +59,15 @@ const ScheduleList = ({value,id,PropStartTime,PropEndTime,PropTotalTime}) => {
 
     const submitTime = useCallback(()=>{
         let totaltime = null;
+        console.log(startTime);
+        console.log(endTime);
+        console.log(new Date(PropStartTime));
+
         if(startTime){
             if(endTime){
-                totaltime = (endTime.getHours()*60 + endTime.getMinutes())-(startTime.getHours()*60 + startTime.getMinutes());
+                totaltime = 
+                (new Date(endTime).getHours()*60 + new Date(endTime).getMinutes())-
+                (new Date(startTime).getHours()*60 + new Date(startTime).getMinutes());
             }
         }
         return dispatch({

@@ -37,6 +37,7 @@ const Today = () => {
     const classes = useStyles();
     const today = new Date();
     const {todayPlan} = useSelector((state)=>state.day);
+    const {submitTimeDone} = useSelector((state)=>state.plan);
     const scheduleArr = todayPlan?.Plans;
     const dayinfo = String(today.getFullYear())+ " " + String(today.getMonth()+1)+ " " + String(today.getDate()) ;
     useEffect(()=>{
@@ -45,7 +46,12 @@ const Today = () => {
             Router.push('/');
         }
     },[User])
-
+    useEffect(()=>{
+      if(submitTimeDone)
+      {
+        Router.push('/Today');
+      }
+    },[submitTimeDone])
 
     return(
         <>
