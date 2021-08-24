@@ -11,7 +11,7 @@ import {  useSelector } from 'react-redux';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import { LOAD_TODAY_REQUEST } from '../reducers/day';
 import Router from 'next/router';
-
+import AlarmOffIcon from '@material-ui/icons/AlarmOff';
 
 const useStyles = makeStyles((theme) => ({
     TodayWrapper : {
@@ -19,6 +19,17 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "30px",
       height : "900px",
     },
+    icon : {
+      color : "#f48fb1",
+      fontSize : "65px",
+    },
+    noSchedule : {
+      marginTop : "170px",
+    },
+    noScheduleComment : {
+      marginTop : "30px",
+      fontSize : "20px",
+    }
   }));
 
 const Today = () => {
@@ -34,14 +45,27 @@ const Today = () => {
             Router.push('/');
         }
     },[User])
+
+
     return(
         <>
             <TopLayout></TopLayout>
             <div className = {classes.TodayWrapper}>
                 <h2>오늘의 일정!</h2>
                 <Chip label={dayinfo}   color="primary" variant="outlined" />
+                {!scheduleArr &&
+                <div className = {classes.noSchedule}>
+                  <AlarmOffIcon className = {classes.icon}/>
+                  <div className =  {classes.noScheduleComment}>아직 오늘 일정이 없습니다</div>
+                </div>}
                 {scheduleArr && scheduleArr.map((value,index)=>
-                    <ScheduleList value = {value.content} index = {index} key = {index}/>
+                    <ScheduleList 
+                    value = {value.content} 
+                    id = {value.id} 
+                    PropStartTime={value.starttime}
+                    PropEndTime={value.endtime}
+                    PropTotalTime={value.totaltime}
+                    key = {index}/>
                 )}
             </div>
             <BottomLayout></BottomLayout>

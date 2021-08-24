@@ -5,16 +5,16 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false, //필수
         },
         starttime: {
-            type: DataTypes.INTEGER,
-            allowNull: true, //필수
+            type: DataTypes.DATE,
+            allowNull: true, 
         },
         endtime: {
-            type: DataTypes.INTEGER,
-            allowNull: true, //필수
+            type: DataTypes.DATE,
+            allowNull: true, 
         },
         totaltime : {
             type: DataTypes.INTEGER,
-            allowNull: true, //필수
+            allowNull: true, 
         }
     },{
         charset : 'utf8mb4',

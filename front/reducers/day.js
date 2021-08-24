@@ -18,6 +18,8 @@ export const LOAD_TODAY_REQUEST = 'LOAD_TODAY_REQUEST';
 export const LOAD_TODAY_SUCCESS = 'LOAD_TODAY_SUCCESS';
 export const LOAD_TODAY_FAILURE = 'LOAD_TODAY_FAILURE';
 
+export const SUBMIT_TODAY_PLAN_SUCCESS = 'SUBMIT_TODAY_PLAN_SUCCESS';
+
 const reducer = (state = initialState, action) =>
     produce(state, (draft) => {
         switch (action.type) {
@@ -49,7 +51,13 @@ const reducer = (state = initialState, action) =>
                 draft.loadTodayLoading = false;
                 draft.loadTodayError = action.error;
                 break;
-
+            case SUBMIT_TODAY_PLAN_SUCCESS:{
+                const submitplan = draft.todayPlan.Plans.find((v)=>v.id === action.data.id);
+                submitplan.starttime = action.data.starttime;
+                submitplan.endtime = action.data.endtime;
+                submitplan.totaltime = action.data.totaltime;
+                break;
+                }
             default:
                 break;
         }

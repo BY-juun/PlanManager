@@ -1,15 +1,22 @@
 import produce from '../util/produce';
 export const initialState = {
-    checkplan : null,
-    submitPlanLoading: false, 
+    checkplan: null,
+    submitPlanLoading: false,
     submitPlanDone: false,
     submitPlanError: null,
+    submitTimeLoading: false,
+    submitTimeDone: false,
+    submitTimeError: null,
 }
 
 
 export const SUBMIT_PLAN_REQUEST = 'SUBMIT_PLAN_REQUEST';
 export const SUBMIT_PLAN_SUCCESS = 'SUBMIT_PLAN_SUCCESS';
 export const SUBMIT_PLAN_FAILURE = 'SUBMIT_PLAN_FAILURE';
+
+export const SUBMIT_TIME_REQUEST = 'SUBMIT_TIME_REQUEST';
+export const SUBMIT_TIME_SUCCESS = 'SUBMIT_TIME_SUCCESS';
+export const SUBMIT_TIME_FAILURE = 'SUBMIT_TIME_FAILURE';
 
 
 const reducer = (state = initialState, action) =>
@@ -28,6 +35,19 @@ const reducer = (state = initialState, action) =>
             case SUBMIT_PLAN_FAILURE:
                 draft.submitPlanLoading = false;
                 draft.submitPlanError = action.error;
+                break;
+            case SUBMIT_TIME_REQUEST:
+                draft.submitTimeLoading = true;
+                draft.submitTimeError = null;
+                draft.submitTimeDone = false;
+                break;
+            case SUBMIT_TIME_SUCCESS:
+                draft.submitTimeLoading = false;
+                draft.submitTimeDone = true;
+                break;
+            case SUBMIT_TIME_FAILURE:
+                draft.submitTimeLoading = false;
+                draft.submitTimeError = action.error;
                 break;
             default:
                 break;
