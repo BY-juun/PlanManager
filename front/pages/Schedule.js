@@ -71,6 +71,7 @@ const Schedule = () => {
     let dayInfo = String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate());
     const [countList, setCountList] = useState([]);
     const [activeStep, setActiveStep] = React.useState(0);
+    const [dayinfo,setDayinfo] = useState(Number(String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate())));
     const steps = getSteps();
 
     const { User } = useSelector((state) => state.user);
@@ -103,7 +104,6 @@ const Schedule = () => {
             } else {
                 dayInfo = (String(date.getFullYear()) + "0" + String(date.getMonth() + 1) + String(date.getDate()))
             }
-
         } else {
             if (date.getDate() < 10) {
                 dayInfo = (String(date.getFullYear()) + String(date.getMonth() + 1) + "0" + String(date.getDate()))
@@ -111,16 +111,19 @@ const Schedule = () => {
                 dayInfo = (String(date.getFullYear()) + String(date.getMonth() + 1) + String(date.getDate()))
             }
         }
+        console.log(dayInfo);
+        setDayinfo(Number(dayInfo));
     }, [selectedDate]);
 
     const submitDate = useCallback(() => {
+        console.log(dayinfo);
         return dispatch({
             type: ADD_DAY_REQUEST,
             data: {
-                dayInfo
+                dayinfo
             }
         })
-    }, [dayInfo])
+    }, [dayInfo,dayinfo])
 
 
     const addInput = useCallback(() => {
@@ -188,7 +191,7 @@ const Schedule = () => {
                         <IconButton color="secondary" aria-label="remove plan" onClick={removeInput}>
                             <RemoveCircleIcon />
                         </IconButton>
-                        {countList.map((value, index) => <PlanForm key={index} dayInfo={dayInfo} />)}
+                        {countList.map((value, index) => <PlanForm key={index} dayInfo={dayinfo} />)}
                         <div>
                             <Button
                                 variant="contained"

@@ -56,7 +56,7 @@ function* loadToday(action) {
 }
 
 function loadPastAPI(data) {
-    return axios.get('/day/past'); //data.dateInfo
+    return axios.post('/day/past',data); 
 }
 
 function* loadPast(action) {
