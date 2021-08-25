@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Day = sequelize.define('Day',{
         dayinfo: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.INTEGER,
             allowNull: false, //필수
         },
     },{

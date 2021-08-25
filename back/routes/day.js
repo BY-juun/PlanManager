@@ -6,17 +6,47 @@ const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op; 
 
+router.post('/past',isLoggedIn,async(req,res,next)=>{
+    try{
+        console.log(req.body.FromdayInfo);
+        console.log(req.body.TodayInfo);
+        const PastPlan = await Day.findAll({
+            where : {
+                dayinfo : {[Op.gt] : req.body.FromdayInfo, [Op.lt] : req.body.TodayInfo},
+            },
+            order : [
+                ['dayinfo','ASC']
+            ],
+            include : [{
+                model : Plan,
+                attributes : {
+                    exclude : ['createdAt','updatedAt']
+                },
+            }],
+
+        })
+        if(!PastPlan){
+            return res.status(403).send("그 기간의 계획이 없습니다.");
+        }
+
+        res.status(201).json(PastPlan);
+    }catch(error){
+        console.error(error);
+        next(error);
+    }
+});
+
 router.post('/',isLoggedIn,async(req,res,next)=>{
     try{
         const theday = await Day.findOne({
-            where : {dayinfo : req.body.dayInfo}
+            where : {dayinfo : req.body.dayinfo}
         });
         if(theday){
             return res.status(403).send("이미 계획을 작성한 날짜입니다.");
         }
 
         await Day.create({ //await 안넣어주면, 비동기이기 때문에, 뒤에 res.json()이 먼저실행될수도있음.
-            dayinfo : req.body.dayInfo,
+            dayinfo : req.body.dayinfo,
             UserId : req.user.id,
         })
         res.status(200).send('ok')
@@ -43,6 +73,7 @@ router.get('/today',isLoggedIn,async(req,res,next)=>{
                 today = (String(date.getFullYear()) + String(date.getMonth() + 1) + String(date.getDate()))
             }
         }
+        today = Number(today);
         
         const todayPlan = await Day.findOne({
             where : {
@@ -70,29 +101,7 @@ router.get('/today',isLoggedIn,async(req,res,next)=>{
 });
 
 
-router.get('/past',isLoggedIn,async(req,res,next)=>{
-    try{
-        const PastPlan = await Day.findAll({
-            where : {
-                dayinfo : {[Op.gt] : req.body.FromdayInfo, [Op.lt] : req.body.TodaydayInfo},
-            },
-            include : [{
-                model : Plan,
-                attributes : {
-                    exclude : ['createdAt','updatedAt']
-                },
-            }]
-        })
-        if(!PastPlan){
-            return res.status(403).send("그 기간의 계획이 없습니다.");
-        }
 
-        res.status(201).json(PastPlan);
-    }catch(error){
-        console.error(error);
-        next(error);
-    }
-});
 
 
 module.exports = router;
