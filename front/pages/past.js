@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme) => ({
     pastListWrapper : {
         textAlign : "center",
         marginTop : "20px"
-    }
+    },
+
 }));
 
 const past = () => {

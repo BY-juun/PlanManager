@@ -61,16 +61,16 @@ router.get('/today',isLoggedIn,async(req,res,next)=>{
         let today;
         if (new Date().getMonth() + 1 < 10) {
             if(new Date().getDate()<10){
-                today = (String(date.getFullYear()) + "0" + String(date.getMonth() + 1) + "0" +String(date.getDate()))
+                today = (String(new Date().getFullYear()) + "0" + String(new Date().getMonth() + 1) + "0" +String(new Date().getDate()))
             }else{
-                today = (String(date.getFullYear()) + "0" + String(date.getMonth() + 1) + String(date.getDate()))
+                today = (String(new Date().getFullYear()) + "0" + String(new Date().getMonth() + 1) + String(new Date().getDate()))
             }
            
         } else {
             if(new Date().getDate()<10){
-                today = (String(date.getFullYear()) + String(date.getMonth() + 1) + "0" +String(date.getDate()))
+                today = (String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + "0" +String(new Date().getDate()))
             }else{
-                today = (String(date.getFullYear()) + String(date.getMonth() + 1) + String(date.getDate()))
+                today = (String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate()))
             }
         }
         today = Number(today);

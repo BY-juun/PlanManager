@@ -67,11 +67,11 @@ const getSteps = () => {
 const Schedule = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(null);
     let dayInfo = String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate());
     const [countList, setCountList] = useState([]);
     const [activeStep, setActiveStep] = React.useState(0);
-    const [dayinfo,setDayinfo] = useState(Number(String(new Date().getFullYear()) + String(new Date().getMonth() + 1) + String(new Date().getDate())));
+    const [dayinfo,setDayinfo] = useState(null);
     const steps = getSteps();
 
     const { User } = useSelector((state) => state.user);
@@ -117,6 +117,9 @@ const Schedule = () => {
 
     const submitDate = useCallback(() => {
         console.log(dayinfo);
+        if(!dayinfo){
+            return alert("날짜를 설정해주세요");
+        }
         return dispatch({
             type: ADD_DAY_REQUEST,
             data: {
