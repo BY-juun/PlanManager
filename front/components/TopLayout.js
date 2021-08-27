@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   },
   mainTitle : {
     textDecoration : "none", color : "white"
+  },
+  appbar : {
+    background : "royalblue",
   }
 }));
 
@@ -24,7 +27,7 @@ export default function ButtonAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className = {classes.appbar}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Link href = "/"><a className = {classes.mainTitle}>PlanManager</a></Link>

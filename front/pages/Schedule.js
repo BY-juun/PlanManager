@@ -28,6 +28,13 @@ import Router from 'next/router';
 import PlanForm from '../components/PlanForm';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import SendIcon from '@material-ui/icons/Send';
+import { Snackbar } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
+
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
     },
     mainredirectionbutton: {
         marginTop: "35px",
+    },
+    snackbar : {
+        marginTop : "350px",
+    },
+    snackbar2 : {
+        marginBottom : "70px",
     }
 }));
 
@@ -73,13 +86,18 @@ const Schedule = () => {
     const [activeStep, setActiveStep] = React.useState(0);
     const [dayinfo,setDayinfo] = useState(null);
     const steps = getSteps();
+    const [open,setOpen] = useState(false);
+    const [dayerror,setDayerror] = useState(false);
+    const [dayinfoerror,setDayinfoerror] = useState(false);
 
     const { User } = useSelector((state) => state.user);
     const { addDayDone, addDayError, addDayLoading } = useSelector((state) => state.day);
     useEffect(() => {
         if (!User) {
-            alert("로그인 후 이용가능합니다");
-            Router.push('/');
+            setOpen(true);
+            setTimeout(()=>{
+                Router.push('/');
+            },2000);
         }
     }, [User])
 
@@ -91,7 +109,8 @@ const Schedule = () => {
 
     useEffect(() => {
         if (addDayError) {
-            alert(addDayError);
+            setSelectedDate(null);
+            setDayerror(true);
         }
     }, [addDayError])
 
@@ -118,7 +137,8 @@ const Schedule = () => {
     const submitDate = useCallback(() => {
         console.log(dayinfo);
         if(!dayinfo){
-            return alert("날짜를 설정해주세요");
+            setSelectedDate(null);
+            return setDayinfoerror(true);
         }
         return dispatch({
             type: ADD_DAY_REQUEST,
@@ -151,19 +171,26 @@ const Schedule = () => {
     const onClickMain = useCallback(() => {
         Router.push('/');
     })
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setDayerror(false);
+        setDayinfoerror(false);
+      };
 
     return (
         <>
             <TopLayout></TopLayout>
             <div className={classes.mainWrapper}>
-                <Stepper activeStep={activeStep} alternativeLabel>
+                {User && <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label) => (
                         <Step key={label}>
                             <StepLabel>{label}</StepLabel>
                         </Step>
                     ))}
-                </Stepper>
-                {activeStep === 0 &&  //1단계일 때,
+                </Stepper>}
+                {activeStep === 0 && User &&  //1단계일 때,
                     <div className={classes.selectDate}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Grid container justifyContent="space-around">
@@ -186,7 +213,7 @@ const Schedule = () => {
                         </Button>
                         </div>
                     </div>}
-                {activeStep === 1 &&
+                {activeStep === 1 && User &&
                     <>
                         <IconButton color="primary" aria-label="add plan" onClick={addInput}>
                             <AddCircleIcon />
@@ -206,7 +233,7 @@ const Schedule = () => {
                         </div>
                     </>
                 }
-                {activeStep === 2 &&
+                {activeStep === 2 && User &&
                     <div className={classes.finalPage}>
                         <CheckCircleOutlineIcon className={classes.iconStyle} />
                         <div className={classes.completetext}>등록이 완료되었습니다.</div>
@@ -223,7 +250,36 @@ const Schedule = () => {
                 }
 
             </div>
-            <BottomLayout></BottomLayout>
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={open}
+                className = {classes.snackbar}
+            >
+                <Alert severity="error">
+                로그인 후 이용 가능합니다.
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={dayerror}
+                className = {classes.snackbar2}
+                onClose = {handleClose}
+            >
+                <Alert severity="error" onClose = {handleClose}>
+                {addDayError}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={dayinfoerror}
+                className = {classes.snackbar2}
+                onClose = {handleClose}
+            >
+                <Alert severity="error" onClose = {handleClose}> 
+                날짜를 제대로 설정해주세요.
+                </Alert>
+            </Snackbar>
+            <BottomLayout value = {'schedule'}></BottomLayout>
         </>
     );
 };

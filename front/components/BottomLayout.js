@@ -7,6 +7,7 @@ import TodayIcon from '@material-ui/icons/Today';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import { useSelector,useDispatch } from 'react-redux';
+import Router from 'next/router';
 import {LOG_OUT_REQUEST} from '../reducers/user';
 const useStyles = makeStyles({
     root: {
@@ -20,30 +21,29 @@ const useStyles = makeStyles({
 
 
 
-const BottomLayout = () => {
+const BottomLayout = ({value}) => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
     const {User} = useSelector((state)=>state.user);
     const dispatch = useDispatch();
     const onClickLogout = useCallback(()=>{
-        return dispatch({
-            type : LOG_OUT_REQUEST
-        })
+        Router.push('/');
+        setTimeout(()=>{
+            dispatch({
+                type : LOG_OUT_REQUEST
+            })
+        },200);
     })
     return (
         <BottomNavigation
-            value={value}
-            onChange={(event, newValue) => {
-                setValue(newValue);
-            }}
             showLabels
             className={classes.root}
+            value = {value}
         >
-            <BottomNavigationAction label="과거" icon={<HistoryIcon />} href = '/past'/>
-            <BottomNavigationAction label="오늘일정" icon={<AccessAlarmIcon />} href = '/Today'/>
-            <BottomNavigationAction label="계획짜기" icon={<TodayIcon />} href = '/Schedule'/>
-            {!User && <BottomNavigationAction label="로그인" icon={<ExitToAppIcon />} href = '/login'/>}
-            {User &&  <BottomNavigationAction label="로그아웃" icon={<ExitToAppIcon />} onClick = {onClickLogout}/>}
+            <BottomNavigationAction label="과거" value = 'past' icon={<HistoryIcon />} href = '/past'/>
+            <BottomNavigationAction label="오늘일정" value = 'today' icon={<AccessAlarmIcon />} href = '/Today'/>
+            <BottomNavigationAction label="계획짜기" value = 'schedule' icon={<TodayIcon />} href = '/Schedule'/>
+            {!User && <BottomNavigationAction label="로그인" value = 'login' icon={<ExitToAppIcon />} href = '/login'/>}
+            {User &&  <BottomNavigationAction label="로그아웃" value = 'logout' icon={<ExitToAppIcon />} onClick = {onClickLogout}/>}
              {/* 나중에 로그인 했으면 logout으로 바꿔줘야한다.*/}
         </BottomNavigation>
     );

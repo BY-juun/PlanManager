@@ -19,6 +19,13 @@ import wrapper from "../store/configureStore";
 import { END } from 'redux-saga';
 import axios from 'axios';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import { Snackbar } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
+
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
 const useStyles = makeStyles((theme) => ({
     mainwrraper: {
@@ -41,7 +48,12 @@ const useStyles = makeStyles((theme) => ({
         textAlign : "center",
         marginTop : "20px"
     },
-
+    snackbar : {
+        marginTop : "350px",
+    },
+    snackbar2 : {
+        marginBottom : "70px",
+    }
 }));
 
 const past = () => {
@@ -49,14 +61,19 @@ const past = () => {
     const dispatch = useDispatch();
     const [selectedFromDate, setSelectedFromDate] = useState(null);
     const [selectedToDate, setSelectedToDate] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [date1,setDate1] = useState(false);
+    const [date2,setDate2] = useState(false);
     const [FromdayInfo, setFromdayInfo] = useState(null);
     const [TodayInfo, setTodayInfo] = useState(null);
     const {pastPlan} = useSelector((state)=>state.day);
     const {User} = useSelector((state)=>state.user);
     useEffect(()=>{
         if(!User){
-            alert("로그인 후 이용 가능합니다");
-            Router.push('/');
+            setOpen(true);
+            setTimeout(()=>{
+                Router.push('/');
+            },2000)
         }
     },[User])
 
@@ -97,12 +114,14 @@ const past = () => {
     },[selectedToDate]);
 
     const submitPast = useCallback(() => {
-        console.log("submit from : " + FromdayInfo);
-        console.log("submit to : " + TodayInfo);
         if (!FromdayInfo || !TodayInfo) {
-            alert("기간을 설정하셔야 합니다");
+            setSelectedFromDate(null);
+            setSelectedToDate(null);
+            return setDate1(true);
         }else if(FromdayInfo >= TodayInfo){
-            alert ("기간이 잘못 설정 되어 있습니다.");
+            setSelectedFromDate(null);
+            setSelectedToDate(null);
+            return setDate2(true);
         }
         else {
             return dispatch({
@@ -113,10 +132,19 @@ const past = () => {
             })
         }
     }, [selectedFromDate, selectedToDate])
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setDate1(false);
+        setDate2(false);
+      };
+
     return (
         <>
             <TopLayout />
-            {!pastPlan && 
+            {User && !pastPlan && 
             <div className={classes.mainwrraper}>
             <CheckCircleOutlineIcon className={classes.icon} />
             <div className={classes.ment}>보고싶은 기간을 설정해주세요</div>
@@ -158,7 +186,7 @@ const past = () => {
             </div>
             </div>}
             <div className = {classes.pastListWrapper}>
-            {pastPlan &&
+            {User && pastPlan &&
                 pastPlan.map((value,index)=>
                 <PastPlanList key = {index} 
                 dayinfo = {value.dayinfo}
@@ -166,7 +194,33 @@ const past = () => {
                 />)
             }
             </div>
-            <BottomLayout />
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={open}
+                className = {classes.snackbar}
+            >
+                <Alert severity="error">
+                로그인 후 이용 가능합니다.
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={date1}
+                className = {classes.snackbar2}
+                onClose = {handleClose}
+            >
+                <Alert severity="error" onClose = {handleClose}>
+                기간을 설정하셔야 합니다
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={date2}
+                className = {classes.snackbar2} onClose = {handleClose}
+            >
+                <Alert severity="error" onClose = {handleClose}>
+                기간이 잘못 설정 되어 있습니다
+                </Alert>
+            </Snackbar>
+            <BottomLayout value = {'past'}/>
         </>
     );
 };
