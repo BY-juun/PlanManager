@@ -60,7 +60,7 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
     const [startTime, setStartTime] = useState(PropStartTime);
     const [endTime, setEndTime] = useState(PropEndTime);
     const [open, setOpen] = useState(false);
-
+    const [totaltimeerror, setTotaltimeerror] = useState(false);
 
     const onChangeStartTime = useCallback((date) => {
         setStartTime(date);
@@ -77,6 +77,7 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
             return;
         }
         setOpen(false);
+        setTotaltimeerror(false);
     };
 
     const submitTime = useCallback(() => {
@@ -96,6 +97,10 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
                 totaltime =
                     (new Date(endTime).getHours() * 60 + new Date(endTime).getMinutes()) -
                     (new Date(startTime).getHours() * 60 + new Date(startTime).getMinutes());
+                if(totaltime <= 0)
+                {
+                    return setTotaltimeerror(true);
+                }
             }
         }
         return dispatch({
@@ -120,7 +125,9 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
 
                 <div>
                     {PropEndTime
-                        ? <div className={classes.totlatimeDiv}><AlarmOnIcon className={classes.clearIcon} /><div >수행시간 : {Math.floor(PropTotalTime / 60)}시간{PropTotalTime % 60}분</div></div>
+                        ? <div className={classes.totlatimeDiv}><AlarmOnIcon className={classes.clearIcon} /><div >
+                            수행시간 : {Math.floor(PropTotalTime / 60)}시간 {PropTotalTime % 60}분
+                            </div></div>
                         :
                         <>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -155,6 +162,11 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
             <Snackbar open={open} autoHideDuration={3000} className={classes.snackbar} onClose = {handleClose}>
                 <Alert severity="error" onClose = {handleClose}>
                     시간 설정이 잘못되었습니다
+                        </Alert>
+            </Snackbar>
+            <Snackbar open={totaltimeerror} autoHideDuration={3000} className={classes.snackbar} onClose = {handleClose}>
+                <Alert severity="error" onClose = {handleClose}>
+                    시간은 오늘 24시 안으로 설정해주세요.
                         </Alert>
             </Snackbar>
         </>

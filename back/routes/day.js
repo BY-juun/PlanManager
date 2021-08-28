@@ -13,6 +13,7 @@ router.post('/past',isLoggedIn,async(req,res,next)=>{
         const PastPlan = await Day.findAll({
             where : {
                 dayinfo : {[Op.gt] : req.body.FromdayInfo, [Op.lt] : req.body.TodayInfo},
+                UserId : req.user.id,
             },
             order : [
                 ['dayinfo','ASC']

@@ -9,7 +9,8 @@ const planManger = ({ Component }) => {
         <>
             <Head>
                 <meta charSet="utf-8"></meta>
-                <title>planManger</title>
+                <title>MyLifeManager
+                </title>
             </Head>
             <Component />
         </>

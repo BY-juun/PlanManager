@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import ScheduleIcon from '@material-ui/icons/Schedule';
@@ -10,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import AddAlarmIcon from '@material-ui/icons/AddAlarm';
 
 const useStyles = makeStyles((theme) => ({
     wrapper : {
@@ -35,18 +36,37 @@ const useStyles = makeStyles((theme) => ({
         marginRight : "50px",
 
     },
+    chip : {
+        marginBottom : "15px"
+    },
+    totalTimediv : {
+        marginTop : "20px",
+        marginBottom : "10px"
+    }
 
   }));
   
 
 const PastPlanList = ({dayinfo, planList}) => {
     const classes = useStyles();
+    const [totaltime,setTotaltime] = useState(0);
+    useEffect(()=>{
+        if(planList){
+            setTotaltime(0);
+            planList.map((value,index)=>{
+                console.log(value.totaltime);
+                setTotaltime(prevTotaltime => prevTotaltime + value.totaltime)
+            })
+            console.log(totaltime);
+        }
+    },[planList])
     return(
         <div className = {classes.wrapper}>
             <Chip
                 label={String(dayinfo).substr(0,4) + "년 " +String(dayinfo).substr(4,2) + "월 " + String(dayinfo).substr(6,8) + "일"}
                 color="primary"
                 variant="outlined"
+                className = {classes.chip}
             />
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
@@ -66,6 +86,9 @@ const PastPlanList = ({dayinfo, planList}) => {
                     </TableBody>
             </Table>
             </TableContainer>
+            {totaltime 
+            ? <div className = {classes.totalTimediv}><AddAlarmIcon className = {classes.icon}/> 총 시간 : {Math.floor(totaltime/60)}시간 {totaltime %60}분</div>
+            : null}
         </div>
     )
 };
