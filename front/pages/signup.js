@@ -145,17 +145,17 @@ const signup = () => {
             </div>
           </form>
           <div className={classes.inputWrapper}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
+            <Button href="http://localhost:3060/user/kakao" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
               카카오톡 회원가입
           </Button>
           </div>
           <div sclassName={classes.inputWrapper}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
+            <Button href="http://localhost:3060/user/facebook" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
               페이스북 회원가입
           </Button>
           </div>
           <div className={classes.inputWrapper}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
+            <Button href="http://localhost:3060/user/google" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
               구글 회원가입
           </Button>
           </div>

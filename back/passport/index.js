@@ -1,6 +1,9 @@
 const passport = require('passport');
 const local = require('./local');
 const {User} = require('../models');
+const kakao = require('./kakao');
+const facebook = require('./facebook');
+const google = require('./google');
 
 module.exports = () => {
     passport.serializeUser((user, done) => {
@@ -16,4 +19,5 @@ module.exports = () => {
         }
     });
     local();
+    kakao();
 }

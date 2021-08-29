@@ -92,6 +92,29 @@ router.get('/logout',isLoggedIn ,(req, res, next) => {
     res.send('ok');
 })
 
+router.get('/kakao', passport.authenticate('kakao'));
+
+router.get('/kakao/callback', passport.authenticate('kakao', {
+    failureRedirect: 'http://localhost:3000',
+}), (req, res) => {
+    return res.redirect("http://localhost:3000")
+});
+
+router.get('/facebook', passport.authenticate('facebook'));
+
+router.get('/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: 'http://localhost:3000',
+}), (req, res) => {
+    return res.redirect("http://localhost:3000")
+});
+
+router.get('/google', passport.authenticate('google'));
+
+router.get('/google/callback', passport.authenticate('google', {
+    failureRedirect: 'http://localhost:3000',
+}), (req, res) => {
+    return res.redirect("http://localhost:3000")
+});
 
 
 module.exports = router;

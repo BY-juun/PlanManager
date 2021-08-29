@@ -9,9 +9,12 @@ import { RiKakaoTalkLine } from 'react-icons/ri';
 import { AiOutlineFacebook, AiOutlineGoogle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
-import { LOG_IN_REQUEST } from '../reducers/user';
+import { LOG_IN_REQUEST, LOAD_MY_INFO_REQUEST  } from '../reducers/user';
 import { Snackbar } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert';
+import wrapper from "../store/configureStore";
+import { END } from 'redux-saga';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     mainWrapper: {
@@ -45,10 +48,14 @@ const login = () => {
     const [password, onChangePassword, setPassword] = useInput('');
     const [open, setOpen] = useState(false);
     const [errormessage,setErrormessage] = useState(false);
+    const [errorUser,setErrorUser] = useState(false);
     const dispatch = useDispatch();
     const classes = useStyles();
     const { User, logInDone, logInError } = useSelector((state) => state.user);
     const nickname = User?.nickname;
+
+
+
     useEffect(() => {
         if (logInError) {
             setErrormessage(true);
@@ -70,6 +77,7 @@ const login = () => {
         }
         setOpen(false);
         setErrormessage(false);
+        setErrorUser(false);
       };
 
     useEffect(() => {
@@ -108,17 +116,17 @@ const login = () => {
                     </div>
                 </form>
                     <div className={classes.inputWrapper}>
-                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
+                        <Button href="http://localhost:3060/user/kakao" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
                             카카오톡 회원가입
                         </Button>
                     </div>
                     <div sclassName={classes.inputWrapper}>
-                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
+                        <Button href="http://localhost:3060/user/facebook" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
                             페이스북 회원가입
                         </Button>
                     </div>
                     <div className={classes.inputWrapper}>
-                        <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
+                        <Button href="http://localhost:3060/user/google" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
                             구글 회원가입
                          </Button>
                     </div>
@@ -132,10 +140,31 @@ const login = () => {
                         {logInError}
                         </Alert>
                     </Snackbar>
+                    <Snackbar open={errorUser} autoHideDuration={3000} onClose={handleClose} className = {classes.snackbar}>
+                        <Alert onClose={handleClose} severity="error">
+                        이미 로그인 되어 있습니다.
+                        </Alert>
+                    </Snackbar>
                 </div>
             <BottomLayout value = {'login'}></BottomLayout>
         </>
     );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store)=>
+async ({req,res}) => {
+    //원래 브라우저에서 cookie를 알아서 넣어주는데 , SSR시에는 브라우저 개입을 못하니까 프론트서버에서 헤더에 쿠키를 넣어서 보내줘야 한다.
+    const cookie = req ? req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if(req && cookie){
+      axios.defaults.headers.Cookie = cookie;
+    }
+    store.dispatch({
+      type : LOAD_MY_INFO_REQUEST,
+    })
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+  });
+  
 
 export default login;
