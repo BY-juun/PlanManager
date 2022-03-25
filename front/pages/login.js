@@ -15,6 +15,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import wrapper from "../store/configureStore";
 import { END } from 'redux-saga';
 import axios from 'axios';
+import { backUrl } from '../config/config';
 
 const useStyles = makeStyles((theme) => ({
     mainWrapper: {
@@ -116,18 +117,18 @@ const login = () => {
                     </div>
                 </form>
                     <div className={classes.inputWrapper}>
-                        <Button href="http://localhost:3060/user/kakao" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
-                            카카오톡 회원가입
+                        <Button href={`${backUrl}/user/kakao`} variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
+                            카카오톡 로그인
                         </Button>
                     </div>
                     <div sclassName={classes.inputWrapper}>
-                        <Button href="http://localhost:3060/user/facebook" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
-                            페이스북 회원가입
+                        <Button href={`${backUrl}/user/facebook`}variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
+                            페이스북 로그인
                         </Button>
                     </div>
                     <div className={classes.inputWrapper}>
-                        <Button href="http://localhost:3060/user/google" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
-                            구글 회원가입
+                        <Button href={`${backUrl}/user/google`} variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
+                            구글 로그인
                          </Button>
                     </div>
                     <Snackbar open={open} autoHideDuration={3000}  className = {classes.snackbar}>
@@ -138,11 +139,6 @@ const login = () => {
                     <Snackbar open={errormessage} autoHideDuration={3000} onClose={handleClose} className = {classes.snackbar}>
                         <Alert onClose={handleClose} severity="error">
                         {logInError}
-                        </Alert>
-                    </Snackbar>
-                    <Snackbar open={errorUser} autoHideDuration={3000} onClose={handleClose} className = {classes.snackbar}>
-                        <Alert onClose={handleClose} severity="error">
-                        이미 로그인 되어 있습니다.
                         </Alert>
                     </Snackbar>
                 </div>

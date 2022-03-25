@@ -5,21 +5,21 @@ module.exports={
   "development": {
     "username": "root",
     "password": process.env.DB_PASSWORD,
-    "database": "PlanManager",
+    "database": "RecordMyDay",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": process.env.DB_PASSWORD,
-    "database": "database_test",
+    "database": "RecordMyDay",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": process.env.DB_PASSWORD,
-    "database": "Byjuun.com",
+    "database": "RecordMyDay",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }

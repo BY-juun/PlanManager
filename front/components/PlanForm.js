@@ -31,12 +31,14 @@ const PlanForm = ({dayInfo}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const {submitPlanDone, checkplan} = useSelector((state)=>state.plan);
-
+    console.log(dayInfo);
     useEffect(()=>{
+        console.log("dddd");
         if(submitPlanDone)
         {
             if(plan === checkplan)
             {
+                
                 setCheckSubmit(true);
             }
         }

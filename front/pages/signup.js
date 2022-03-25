@@ -16,6 +16,7 @@ import axios from 'axios';
 import { red } from '@material-ui/core/colors';
 import { Snackbar } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert';
+import { backUrl } from '../config/config';
 
 
 function Alert(props) {
@@ -25,7 +26,7 @@ function Alert(props) {
 const useStyles = makeStyles((theme) => ({
   mainWrapper: {
     textAlign: "center",
-    marginTop: "100px",
+    marginTop: "30px",
   },
   wrapper: {
     marginTop: "15px",
@@ -101,7 +102,6 @@ const signup = () => {
     if (password !== passwordCheck) {
       return setPasswordError(true);
     }
-    console.log('dd');
     return dispatch({
       type: SIGN_UP_REQUEST,
       data: {
@@ -145,17 +145,17 @@ const signup = () => {
             </div>
           </form>
           <div className={classes.inputWrapper}>
-            <Button href="http://localhost:3060/user/kakao" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
+            <Button href={`${backUrl}/user/kakao`} variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<RiKakaoTalkLine />}>
               카카오톡 회원가입
           </Button>
           </div>
           <div sclassName={classes.inputWrapper}>
-            <Button href="http://localhost:3060/user/facebook" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
+            <Button href={`${backUrl}/user/facebook`} variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineFacebook />}>
               페이스북 회원가입
           </Button>
           </div>
           <div className={classes.inputWrapper}>
-            <Button href="http://localhost:3060/user/google" variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
+            <Button href={`${backUrl}/user/google`} variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField} startIcon={<AiOutlineGoogle />}>
               구글 회원가입
           </Button>
           </div>

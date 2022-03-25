@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "15px",
     },
     timepicker: {
-        width: "160px",
+        width: "140px",
         marginLeft: "10px",
         marginRight: "10px",
     },
@@ -42,7 +42,11 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "80px",
     },
     mainWrapper: {
-        border: "1px solid #3f51b5", marginTop: "15px", marginLeft: "15px", marginRight: "15px", borderRadius: "15px"
+        border: "1px solid #3f51b5",  
+        marginLeft: "15px", 
+        marginRight: "15px", 
+        borderRadius: "15px",
+        marginBottom : "56px",
     },
     totlatimeDiv: {
         marginTop: "10px",
@@ -73,12 +77,10 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
 
     const onChangeStartTime = useCallback((date) => {
         setStartTime(date);
-        console.log(date);
     }, [startTime]);
 
     const onChangeEndTime = useCallback((date) => {
         setEndTime(date);
-        console.log(date);
     }, [endTime]);
 
     const handleClose = (event, reason) => {
@@ -91,10 +93,6 @@ const ScheduleList = ({ value, id, PropStartTime, PropEndTime, PropTotalTime }) 
 
     const submitTime = useCallback(() => {
         let totaltime = null;
-        console.log(startTime);
-        console.log(endTime);
-        console.log(new Date(PropStartTime));
-
         if (startTime) {
             if (endTime) {
                 if (startTime > endTime) {

@@ -1,12 +1,12 @@
 const passport = require('passport');
 const GoogleStrategy   = require('passport-google-oauth2').Strategy;
-
+const {User} = require('../models');
 module.exports = () => {
  
     passport.use(new GoogleStrategy({ 
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret : process.env.GOOGLE_SECRET,
-      callbackURL: 'http://localhost:3060/user/google/callback',
+      callbackURL: 'https://api.recordmyday.com/user/google/callback',
     }, async (accessToken, refreshToken, profile, done) => {
       try {
         const exUser = await User.findOne({
@@ -20,7 +20,6 @@ module.exports = () => {
             nickname: profile.displayName,
             snsId: profile.id,
             provider: 'google',
-            color : nickcolor,
           });
           done(null, newUser);
         }
