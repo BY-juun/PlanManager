@@ -1,34 +1,28 @@
-import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
-import axios from 'axios';
+import { all, fork, put, takeLatest, call } from "redux-saga/effects";
+import axios from "axios";
 
 import {
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
-
   LOG_OUT_FAILURE,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
-
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
-
-  LOAD_MY_INFO_REQUEST, 
+  LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
   LOAD_MY_INFO_FAILURE,
-} from '../reducers/user';
-
-
-
+} from "../reducers/user";
 
 function logInAPI(data) {
-  return axios.post('/user/login', data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
-    const result = yield call(logInAPI,action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -43,7 +37,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.get('/user/logout');
+  return axios.get("/user/logout");
 }
 
 function* logOut() {
@@ -62,12 +56,12 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post('/user/signup',data);
+  return axios.post("/user/signup", data);
 }
 
 function* signUp(action) {
   try {
-    const result = yield call(signUpAPI,action.data);
+    const result = yield call(signUpAPI, action.data);
     console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
@@ -82,7 +76,7 @@ function* signUp(action) {
 }
 
 function loadMyInfoAPI() {
-  return axios.get('/user');
+  return axios.get("/user");
 }
 
 function* loadMyInfo() {
@@ -118,10 +112,5 @@ function* watchLoadMyInfo() {
 }
 
 export default function* userSaga() {
-  yield all([
-    fork(watchSignUp),
-    fork(watchLogIn),
-    fork(watchLogOut),
-    fork(watchLoadMyInfo),
-  ]);
+  yield all([fork(watchSignUp), fork(watchLogIn), fork(watchLogOut), fork(watchLoadMyInfo)]);
 }

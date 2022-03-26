@@ -1,24 +1,24 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
 import Head from "next/head"; //Head component
 import "../styles.css";
-import wrapper from "../store/configureStore";
 import { AppProps } from "next/app";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 
 const RecordMyDay = ({ Component, pageProps }: AppProps) => {
+  const [queryClient] = useState(() => new QueryClient());
   return (
     <>
-      <Head>
-        <meta charSet="utf-8"></meta>
-        <title>RecordMyDay</title>
-      </Head>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <Head>
+            <meta charSet="utf-8"></meta>
+            <title>RecordMyDay</title>
+          </Head>
+          <Component {...pageProps} />
+        </Hydrate>
+      </QueryClientProvider>
     </>
   );
 };
 
-RecordMyDay.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-};
-
-export default wrapper.withRedux(RecordMyDay);
+export default RecordMyDay;
