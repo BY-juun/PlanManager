@@ -8,6 +8,7 @@ const passport = require("passport");
 router.get("/", async (req, res, next) => {
   //loadmyinfo
   try {
+    console.log(req);
     if (req.user) {
       //새로고침해도 로그인 유지되도록
       const user = await User.findOne({

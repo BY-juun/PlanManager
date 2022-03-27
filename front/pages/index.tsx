@@ -33,14 +33,17 @@ import Button from "@material-ui/core/Button";
 import { GetServerSidePropsContext } from "next";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import { getMyInfoAPI, logoutAPI } from "../API/users";
+import { useRouter } from "next/router";
 const Home = () => {
   const classes = useStyles();
-
+  const router = useRouter();
   const onClickLogout = useCallback(() => {
     logoutAPI();
+    router.push("/");
   }, []);
 
   const { data: UserData } = useQuery("myInfo", () => getMyInfoAPI());
+  console.log(UserData);
 
   return (
     <>
@@ -74,8 +77,6 @@ const Home = () => {
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  //원래 브라우저에서 cookie를 알아서 넣어주는데 , SSR시에는 브라우저 개입을 못하니까 프론트서버에서 헤더에 쿠키를 넣어서 보내줘야 한다.
-  //const { req } = context;
   const { req } = context;
   const cookie = req ? req.headers.cookie : "";
   axios.defaults.headers.Cookie = "";
