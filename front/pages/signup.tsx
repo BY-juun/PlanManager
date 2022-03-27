@@ -4,21 +4,17 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import useInput from "../hooks/useInput";
-import React, { useCallback, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useState } from "react";
 import { RiKakaoTalkLine } from "react-icons/ri";
 import { AiOutlineFacebook, AiOutlineGoogle } from "react-icons/ai";
-import Router, { useRouter } from "next/router";
-import { SIGN_UP_REQUEST, LOAD_MY_INFO_REQUEST } from "../reducers/user";
-import wrapper from "../store/configureStore";
-import { END } from "redux-saga";
+import { useRouter } from "next/router";
 import axios from "axios";
-import { red } from "@material-ui/core/colors";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { backUrl } from "../config/config";
 import { getMyInfoAPI, signUpApi } from "../API/users";
 import { GetServerSidePropsContext } from "next";
+import { useMutation } from "react-query";
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -53,15 +49,34 @@ const useStyles = makeStyles((theme) => ({
 
 const signup = () => {
   const router = useRouter();
-  const [email, onChangeEmail, setEmail] = useInput("");
-  const [nickname, onChangeNickname, setNickname] = useInput("");
-  const [password, onChangePassword, setPassword] = useInput("");
+  const [email, onChangeEmail] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
+  const [password, onChangePassword] = useInput("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [signupSuccess, setSignupSuccess] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState("");
   const classes = useStyles();
+
+  const mutation = useMutation("signUp", signUpApi, {
+    onError: (error: any) => {
+      setErrorMessage(error.data);
+      setIsError(true);
+    },
+    onSuccess: (response) => {
+      if (response.status === 403) signUpFailure(response.data);
+      else signUpSuccess();
+    },
+  });
+
+  const signUpSuccess = useCallback(() => {
+    alert("성공");
+    router.push("/");
+  }, []);
+
+  const signUpFailure = useCallback((res: string) => {
+    alert(res);
+  }, []);
 
   const onChangePasswordCheck = useCallback(
     (e) => {
@@ -82,16 +97,7 @@ const signup = () => {
         password: password,
         nickname: nickname,
       };
-      const data = await signUpApi(signUpData);
-      if (data?.status === 403) {
-        setErrorMessage(data.data);
-        setIsError(true);
-        return;
-      }
-      setSignupSuccess(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      mutation.mutate(signUpData);
     },
     [email, nickname, password, passwordCheck]
   );
@@ -175,10 +181,6 @@ const signup = () => {
           </Button>
         </div>
       </div>
-
-      <Snackbar open={signupSuccess} autoHideDuration={3000} className={classes.snackbar}>
-        <Alert severity="success">회원가입이 완료되었습니다. 메인화면으로 돌아갑니다</Alert>
-      </Snackbar>
       <Snackbar open={isError} autoHideDuration={2000} className={classes.snackbar} onClose={handleClose}>
         <Alert severity="error" onClose={handleClose}>
           {errorMessage}

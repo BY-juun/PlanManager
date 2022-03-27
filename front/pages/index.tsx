@@ -43,7 +43,14 @@ const Home = () => {
   }, []);
 
   const { data: UserData } = useQuery("myInfo", () => getMyInfoAPI());
-  console.log(UserData);
+
+  const onClickLoginBtn = useCallback(() => {
+    router.push("/login");
+  }, []);
+
+  const onClickSignUpBtn = useCallback(() => {
+    router.push("/signup");
+  }, [router]);
 
   return (
     <>
@@ -54,10 +61,10 @@ const Home = () => {
         <div className={classes.mainMessage}>기록하자</div>
         {!UserData && (
           <>
-            <Button variant="outlined" color="primary" className={classes.root} href="/login">
+            <Button variant="outlined" color="primary" className={classes.root} onClick={onClickLoginBtn}>
               Login
             </Button>
-            <Button variant="outlined" color="primary" className={classes.root} href="/signup">
+            <Button variant="outlined" color="primary" className={classes.root} onClick={onClickSignUpBtn}>
               SignUp
             </Button>
           </>
