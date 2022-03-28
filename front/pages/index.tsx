@@ -31,19 +31,22 @@ const useStyles = makeStyles((theme) => ({
 
 import Button from "@material-ui/core/Button";
 import { GetServerSidePropsContext } from "next";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { dehydrate, QueryClient, useQuery, UseQueryResult } from "react-query";
 import { getMyInfoAPI, logoutAPI } from "../API/users";
 import { useRouter } from "next/router";
+import { useLogoutMutation, useUserInfoQuery } from "../_Query/user";
 const Home = () => {
   const classes = useStyles();
   const router = useRouter();
+  const logoutMutation = useLogoutMutation();
+
   const onClickLogout = useCallback(() => {
-    logoutAPI();
-    router.push("/");
+    logoutMutation.mutate();
   }, []);
 
-  const { data: UserData } = useQuery("myInfo", () => getMyInfoAPI());
-
+  const dd = useUserInfoQuery();
+  const { data: UserData } = dd;
+  console.log(dd);
   const onClickLoginBtn = useCallback(() => {
     router.push("/login");
   }, []);
@@ -83,20 +86,20 @@ const Home = () => {
   );
 };
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const { req } = context;
-  const cookie = req ? req.headers.cookie : "";
-  axios.defaults.headers.Cookie = "";
-  if (req && cookie) {
-    axios.defaults.headers.Cookie = cookie;
-  }
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery("myInfo", () => getMyInfoAPI());
-  return {
-    props: {
-      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
-    },
-  };
-};
+// export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+//   const { req } = context;
+//   const cookie = req ? req.headers.cookie : "";
+//   axios.defaults.headers.Cookie = "";
+//   if (req && cookie) {
+//     axios.defaults.headers.Cookie = cookie;
+//   }
+//   const queryClient = new QueryClient();
+//   await queryClient.prefetchQuery("myInfo", () => getMyInfoAPI(), { staleTime: 5000 });
+//   return {
+//     props: {
+//       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+//     },
+//   };
+// };
 
 export default Home;

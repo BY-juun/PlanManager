@@ -51,7 +51,7 @@ const login = () => {
   const router = useRouter();
   const classes = useStyles();
 
-  const mutation = useMutation("myInfo", loginAPI, {
+  const mutation = useMutation("LoginRequest", loginAPI, {
     onError: (error: any) => {
       setIsError(true);
       setErrorMessage(error.data);
