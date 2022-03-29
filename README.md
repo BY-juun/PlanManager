@@ -27,6 +27,6 @@
 <br/>
 <br/>
 
-### 현재 JSX, Redux, Saga 에서 TypeScript, ReactQuery로 Migration 중
+### 현재 JS,React, NextJS, Redux, Saga 에서 React, NextJs, TypeScript, ReactQuery로 Migration 중
 
 이전 버전은 <a href="https://github.com/BY-juun/RecordMyDay/tree/JavaScriptRedux">여기로</a>
