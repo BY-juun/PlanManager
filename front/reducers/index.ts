@@ -1,6 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
 import plan from "./plan";
-import user from "./user";
 import day from "./day";
 import { AnyAction, combineReducers, Store } from "redux";
 import { Task } from "redux-saga";
@@ -12,7 +11,6 @@ const rootReducer = (state: any, action: AnyAction) => {
       return action.payload;
     default: {
       const combinedReducers = combineReducers({
-        user,
         plan,
         day,
       });

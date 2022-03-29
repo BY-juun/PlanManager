@@ -14,6 +14,7 @@ import { backUrl } from "../config/config";
 import { GetServerSidePropsContext } from "next";
 import { getMyInfoAPI, loginAPI } from "../API/users";
 import { useMutation, useQueryClient } from "react-query";
+import { useLoginMutation } from "../_Query/user";
 
 const useStyles = makeStyles((theme) => ({
   mainWrapper: {
@@ -41,35 +42,26 @@ function Alert(props: any) {
 }
 
 const login = () => {
-  const queryClient = useQueryClient();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
   const router = useRouter();
   const classes = useStyles();
 
-  const mutation = useMutation("LoginRequest", loginAPI, {
-    onError: (error: any) => {
+  const LoginSuccess = useCallback((data) => {
+    if (data?.status === 401) {
       setIsError(true);
-      setErrorMessage(error.data);
-    },
-    onSuccess: (data) => {
-      if (data.status === 401) {
-        setIsError(true);
-        setErrorMessage(data.data);
-        return;
-      }
-      queryClient.setQueryData("myInfo", data);
-      setLoginSuccess(true);
-      setNickname(data.nickname);
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
-    },
-  });
+      setErrorMessage(data.data);
+      return;
+    }
+    alert(`환엽합니다 ${data?.nickname}님`);
+    setTimeout(() => {
+      router.push("/");
+    }, 500);
+  }, []);
+
+  const loginMutation = useLoginMutation(LoginSuccess);
 
   const handleClose = (event: any, reason: any) => {
     if (reason === "clickaway") {
@@ -86,7 +78,7 @@ const login = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
-      mutation.mutate(loginData);
+      loginMutation.mutate(loginData);
     }
   }, []);
 
@@ -146,9 +138,6 @@ const login = () => {
             구글 로그인
           </Button>
         </div>
-        <Snackbar open={loginSuccess} autoHideDuration={3000} className={classes.snackbar}>
-          <Alert severity="success">환영합니다 {nickname}님</Alert>
-        </Snackbar>
         <Snackbar open={isError} autoHideDuration={3000} onClose={handleClose} className={classes.snackbar}>
           <Alert onClose={handleClose} severity="error">
             {errorMessage}
@@ -168,7 +157,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     axios.defaults.headers.Cookie = cookie;
   }
   const response = await getMyInfoAPI();
-  if (response?.data) {
+  if (response?.id) {
     return {
       redirect: {
         destination: "/",
