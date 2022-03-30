@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import TopLayout from "../components/TopLayout";
-import BottomLayout from "../components/BottomLayout";
+import TopLayOut from "../components/LayOut/TopLayOut";
+import BottomLayout from "../components/LayOut/BottomLayOut";
 import todolist from "../public/todolist.png";
 import { useUserInfoQuery } from "../_Query/user";
 import MainPageButtonSet from "../components/MainPageButtonSet";
@@ -21,7 +21,7 @@ const Home = () => {
 
   return (
     <>
-      <TopLayout></TopLayout>
+      <TopLayOut />
       <div className={classes.mainWrapper}>
         <Image src={todolist} alt="Picture of the author" width={100} height={100} />
         <MainPageButtonSet mode={UserData ? true : false} />

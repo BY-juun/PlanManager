@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import useInput from "../hooks/useInput";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { SUBMIT_PLAN_REQUEST } from "../reducers/plan";
+import { useAddPlanMutation } from "../../../_Query/schedule";
+import useInput from "../../../hooks/useInput";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -23,32 +21,34 @@ const useStyles = makeStyles((theme) => ({
   submitComplete: {},
 }));
 
-const PlanForm = ({ dayInfo }) => {
+interface Props {
+  dayInfo: string;
+}
+
+const PlanForm = ({ dayInfo }: Props) => {
   const [plan, onChangePlan] = useInput("");
   const [checkSubmit, setCheckSubmit] = useState(false);
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { submitPlanDone, checkplan } = useSelector((state) => state.plan);
 
-  useEffect(() => {
-    console.log("dddd");
-    if (submitPlanDone) {
-      if (plan === checkplan) {
+  const onSuccesFunc = useCallback(
+    (data) => {
+      if (data === plan) {
         setCheckSubmit(true);
       }
-    }
-  }, [submitPlanDone, plan, checkplan]);
+    },
+    [plan]
+  );
+
+  const AddPlanMutation = useAddPlanMutation(onSuccesFunc);
 
   const submitPlan = useCallback(
     (e) => {
       e.preventDefault();
-      return dispatch({
-        type: SUBMIT_PLAN_REQUEST,
-        data: {
-          plan,
-          dayInfo,
-        },
-      });
+      const reqData = {
+        plan: plan,
+        dayInfo: dayInfo,
+      };
+      AddPlanMutation.mutate(reqData);
     },
     [plan]
   );
@@ -73,10 +73,6 @@ const PlanForm = ({ dayInfo }) => {
       </form>
     </div>
   );
-};
-
-PlanForm.propTypes = {
-  dayInfo: PropTypes.string.isRequired,
 };
 
 export default PlanForm;

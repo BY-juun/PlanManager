@@ -6,7 +6,7 @@ import HistoryIcon from "@material-ui/icons/History";
 import TodayIcon from "@material-ui/icons/Today";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
-import { getMyInfoAPI, logoutAPI } from "../API/users";
+import { getMyInfoAPI, logoutAPI } from "../../../API/users";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 const useStyles = makeStyles({

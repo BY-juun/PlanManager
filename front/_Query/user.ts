@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMyInfoAPI, loginAPI, logoutAPI } from "../API/users";
 import { UserInfo } from "../Types/user";
 

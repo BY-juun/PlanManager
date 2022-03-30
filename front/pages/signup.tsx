@@ -1,5 +1,5 @@
-import TopLayout from "../components/TopLayout";
-import BottomLayout from "../components/BottomLayout";
+import TopLayOut from "../components/LayOut/TopLayOut";
+import BottomLayout from "../components/LayOut/BottomLayOut";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -111,8 +111,7 @@ const signup = () => {
 
   return (
     <>
-      <TopLayout></TopLayout>
-
+      <TopLayOut />
       <div className={classes.mainWrapper}>
         <form onSubmit={onSubmitForm}>
           <div className={classes.inputWrapper}>
