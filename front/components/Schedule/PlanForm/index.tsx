@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { useAddPlanMutation } from "../../../_Query/schedule";
 import useInput from "../../../hooks/useInput";
+import { useRecoilState } from "recoil";
+import { CompletePlanFormNum } from "../../../_Recoil/schedule";
 
 const useStyles = makeStyles((theme) => ({
   inputField: {
@@ -28,15 +30,17 @@ interface Props {
 const PlanForm = ({ dayInfo }: Props) => {
   const [plan, onChangePlan] = useInput("");
   const [checkSubmit, setCheckSubmit] = useState(false);
+  const [completePlanFormNum, setCompletPlanFormNum] = useRecoilState(CompletePlanFormNum);
   const classes = useStyles();
 
   const onSuccesFunc = useCallback(
     (data) => {
-      if (data === plan) {
+      if (String(data) === plan) {
         setCheckSubmit(true);
+        setCompletPlanFormNum(completePlanFormNum + 1);
       }
     },
-    [plan]
+    [plan, completePlanFormNum]
   );
 
   const AddPlanMutation = useAddPlanMutation(onSuccesFunc);

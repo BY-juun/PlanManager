@@ -1,24 +1,26 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
-import { useRecoilValue } from "recoil";
-import { PickDateInfo } from "../../../_Recoil/schedule";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { ActiveStep, CompletePlanFormNum, PickDateInfo, PlanFormNum } from "../../../_Recoil/schedule";
 import PlanForm from "../PlanForm";
 
-interface Props {
-  setActiveStep: Dispatch<SetStateAction<number>>;
-}
-
-const SettingPlan = ({ setActiveStep }: Props) => {
-  const [planFormNum, setPlanFormNum] = useState<number>(1);
+const SettingPlan = () => {
+  const [planFormNum, setPlanFormNum] = useRecoilState(PlanFormNum);
+  const completePlanFormNum = useRecoilValue(CompletePlanFormNum);
   const DayInfo = useRecoilValue(PickDateInfo);
+  const setActiveStep = useSetRecoilState(ActiveStep);
 
   const submitPlanComplete = useCallback(() => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  }, []);
+    if (planFormNum !== completePlanFormNum) {
+      alert("아직 등록하지 않은 계획이 있습니다");
+      return;
+    }
+    setActiveStep((prevStep) => prevStep + 1);
+  }, [planFormNum, completePlanFormNum]);
 
   const addInput = useCallback(() => {
     setPlanFormNum((prevNum) => prevNum + 1);

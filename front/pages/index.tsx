@@ -4,8 +4,8 @@ import TopLayOut from "../components/LayOut/TopLayOut";
 import BottomLayout from "../components/LayOut/BottomLayOut";
 import todolist from "../public/todolist.png";
 import { useUserInfoQuery } from "../_Query/user";
-import MainPageButtonSet from "../components/MainPageButtonSet";
 import { makeStyles } from "@material-ui/core/styles";
+import ButtonSet from "../components/MainPage/ButtonSet";
 
 const useStyles = makeStyles((theme) => ({
   mainWrapper: {
@@ -24,7 +24,7 @@ const Home = () => {
       <TopLayOut />
       <div className={classes.mainWrapper}>
         <Image src={todolist} alt="Picture of the author" width={100} height={100} />
-        <MainPageButtonSet mode={UserData ? true : false} />
+        <ButtonSet mode={UserData ? true : false} />
       </div>
       <BottomLayout value={null}></BottomLayout>
     </>

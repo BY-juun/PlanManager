@@ -2,11 +2,10 @@ import React, { useCallback } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
-import FaceIcon from "@material-ui/icons/Face";
-import { LOGIN, NOT_LOGIN } from "../util/constant";
-import { useLogoutMutation, useUserInfoQuery } from "../_Query/user";
+import { LOGIN, NOT_LOGIN } from "../../../util/constant";
+import { useLogoutMutation, useUserInfoQuery } from "../../../_Query/user";
 import { useRouter } from "next/router";
+import { UserNickNameChip } from "./styles";
 
 interface Props {
   mode: boolean;
@@ -19,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     width: "200px",
   },
-  Userchip: {
-    marginTop: "50px",
-  },
   mainWrapper: {
     textAlign: "center",
     marginTop: "130px",
@@ -33,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainPageButtonSet = ({ mode }: Props) => {
+const ButtonSet = ({ mode }: Props) => {
   const classes = useStyles();
   const { data: UserData } = useUserInfoQuery();
   const router = useRouter();
@@ -66,7 +62,7 @@ const MainPageButtonSet = ({ mode }: Props) => {
       )}
       {mode === LOGIN && (
         <>
-          <Chip variant="outlined" size="medium" icon={<FaceIcon />} label={UserData?.nickname} clickable color="primary" className={classes.Userchip} />
+          <UserNickNameChip>{UserData?.nickname}님</UserNickNameChip>
           <Button variant="outlined" color="primary" className={classes.root} onClick={onClickLogout}>
             Logout
           </Button>
@@ -76,4 +72,4 @@ const MainPageButtonSet = ({ mode }: Props) => {
   );
 };
 
-export default MainPageButtonSet;
+export default ButtonSet;

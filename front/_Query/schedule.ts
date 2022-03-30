@@ -1,13 +1,13 @@
 import { useMutation } from "react-query";
 import { addPlanAPI, addScheduleAPI } from "../API/schedule";
 
-export const useAddScheduleMutation = (onSuccess: () => void, onFailure: () => void) => {
+export const useAddScheduleMutation = (onSuccess: () => void, onFailure: (response: any) => void) => {
   return useMutation(addScheduleAPI, {
     onSuccess: () => {
       onSuccess();
     },
-    onError: () => {
-      onFailure();
+    onError: (response) => {
+      onFailure(response);
     },
   });
 };

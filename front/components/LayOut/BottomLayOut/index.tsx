@@ -1,7 +1,5 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import HistoryIcon from "@material-ui/icons/History";
 import TodayIcon from "@material-ui/icons/Today";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -9,6 +7,8 @@ import AccessAlarmIcon from "@material-ui/icons/AccessAlarm";
 import { getMyInfoAPI, logoutAPI } from "../../../API/users";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
+import { BottomLayOutItem, BottomLayOutWrapper } from "./styles";
+import { useLogoutMutation } from "../../../_Query/user";
 const useStyles = makeStyles({
   root: {
     position: "fixed",
@@ -23,24 +23,54 @@ interface Props {
   value: string | null;
 }
 
+//value에 따른 highlighting 처리 해야함.
 const BottomLayout = ({ value }: Props) => {
-  const classes = useStyles();
   const router = useRouter();
+
+  const logoutMutation = useLogoutMutation();
+
+  const gotoHistory = useCallback(() => {
+    router.push("/past");
+  }, []);
+
+  const gotoToday = useCallback(() => {
+    router.push("/Today");
+  }, []);
+
+  const gotoSchedule = useCallback(() => {
+    router.push("/Schedule");
+  }, []);
+
   const onClickLogout = useCallback(() => {
-    logoutAPI();
+    logoutMutation.mutate();
     router.push("/");
   }, []);
 
+  const onClickLogin = useCallback(() => {
+    router.push("/login");
+  }, []);
+
   const { data: UserData } = useQuery("myInfo", () => getMyInfoAPI());
+
   return (
-    <BottomNavigation showLabels className={classes.root} value={value}>
-      <BottomNavigationAction label="과거" value="past" icon={<HistoryIcon />} href="/past" />
-      <BottomNavigationAction label="오늘일정" value="today" icon={<AccessAlarmIcon />} href="/Today" />
-      <BottomNavigationAction label="계획짜기" value="schedule" icon={<TodayIcon />} href="/Schedule" />
-      {!UserData && <BottomNavigationAction label="로그인" value="login" icon={<ExitToAppIcon />} href="/login" />}
-      {UserData && <BottomNavigationAction label="로그아웃" value="logout" icon={<ExitToAppIcon />} onClick={onClickLogout} />}
-      {/* 나중에 로그인 했으면 logout으로 바꿔줘야한다.*/}
-    </BottomNavigation>
+    <BottomLayOutWrapper>
+      <BottomLayOutItem onClick={gotoHistory}>
+        <HistoryIcon />
+        <div>과거</div>
+      </BottomLayOutItem>
+      <BottomLayOutItem onClick={gotoToday}>
+        <AccessAlarmIcon />
+        <div>오늘일정</div>
+      </BottomLayOutItem>
+      <BottomLayOutItem onClick={gotoSchedule}>
+        <TodayIcon />
+        <div>계획짜기</div>
+      </BottomLayOutItem>
+      <BottomLayOutItem onClick={UserData ? onClickLogout : onClickLogin}>
+        <ExitToAppIcon />
+        {UserData ? <div>로그아웃</div> : <div>로그인</div>}
+      </BottomLayOutItem>
+    </BottomLayOutWrapper>
   );
 };
 

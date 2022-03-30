@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import Grid from "@material-ui/core/Grid";
@@ -6,9 +6,8 @@ import DateFnsUtils from "@date-io/date-fns";
 import Button from "@material-ui/core/Button";
 import { useAddScheduleMutation } from "../../../_Query/schedule";
 import { makeDateForm } from "../../../util/makeDateForm";
-import { getTodayInfo } from "../../../util/getTodayInfo";
-import { useRecoilState } from "recoil";
-import { PickDateInfo } from "../../../_Recoil/schedule";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { ActiveStep, PickDateInfo } from "../../../_Recoil/schedule";
 
 const useStyles = makeStyles((theme) => ({
   finishButton: {
@@ -19,23 +18,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
-  setActiveStep: Dispatch<SetStateAction<number>>;
-  setDayerror: Dispatch<SetStateAction<boolean>>;
-}
-
-const PickDate = ({ setActiveStep, setDayerror }: Props) => {
+const PickDate = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [dayInfo, setDayInfo] = useRecoilState(PickDateInfo);
+  const setActiveStep = useSetRecoilState(ActiveStep);
 
   const AddScheduleSuccessFunction = useCallback(() => {
-    setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
+    setActiveStep((prevStep) => prevStep + 1);
   }, []);
 
-  const AddScheduleFailureFunction = useCallback(() => {
+  const AddScheduleFailureFunction = useCallback((data) => {
+    console.log(data);
+    if (data) {
+      alert("해당 날짜에 이미 계획이 존재합니다");
+    }
     setSelectedDate(null);
-    setDayerror(true);
   }, []);
 
   const addScheduleMutation = useAddScheduleMutation(AddScheduleSuccessFunction, AddScheduleFailureFunction);
