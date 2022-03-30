@@ -13,9 +13,10 @@
 
 <p align = "center">
     <img src="https://img.shields.io/badge/React-v17.0.2-blue?logo=React"/></a>
-    <img src="https://img.shields.io/badge/TypeScript-v4.5.5-white?logo=TypeScript&logoColor=skyblue"/></a>
+    <img src="https://img.shields.io/badge/TypeScript-v4.5.5-skyblue?logo=TypeScript&logoColor=skyblue"/></a>
     <img src="https://img.shields.io/badge/NextJs-v11.1.0-white?logo=Next.js&logoColor=white"/></a>
-    <img src="https://img.shields.io/badge/ReactQuery-v3.34.17-white?style=flat-square&logo=ReactQuery&logoColor=#FF4154"/></a>
+    <img src="https://img.shields.io/badge/ReactQuery-v3.34.17-FF4154?style=flat-square&logo=ReactQuery&logoColor=#FF4154"/></a>
+    <img src="https://img.shields.io/badge/Recoil-v0.6.1-white?style=flat-square&"/></a>
 </p>
 <p align = "center">
     <img src="https://img.shields.io/badge/Express-v4.17.1-important?logo=Express&logoColor=orange"/></a>
