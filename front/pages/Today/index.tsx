@@ -9,7 +9,7 @@ import BottomLayout from "../../components/LayOut/BottomLayOut";
 import PlanCard from "../../components/TodayPage/PlanCard";
 import { useUserInfoQuery } from "../../_Query/user";
 import { useGetToday } from "../../_Query/today";
-import { CardListWrapper } from "./styles";
+import { CardListWrapper, DayInfo } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
   TodayWrapper: {
@@ -27,12 +27,6 @@ const useStyles = makeStyles((theme) => ({
   noScheduleComment: {
     marginTop: "30px",
     fontSize: "20px",
-  },
-  snackbar: {
-    marginTop: "350px",
-  },
-  chipp: {
-    marginBottom: "15px",
   },
 }));
 
@@ -59,8 +53,7 @@ const Today: VFC = () => {
       <TopLayOut />
       {UserData && !todayLoading && (
         <div className={classes.TodayWrapper}>
-          <h2>오늘의 일정!</h2>
-          <Chip className={classes.chipp} label={dayinfo} color="primary" variant="outlined" />
+          <DayInfo>{makeDayTitle(dayinfo)}</DayInfo>
           {!TodayData?.Plans && (
             <div className={classes.noSchedule}>
               <AlarmOffIcon className={classes.icon} />
@@ -73,6 +66,11 @@ const Today: VFC = () => {
       <BottomLayout value={"today"}></BottomLayout>
     </>
   );
+};
+
+const makeDayTitle = (dayinfo: string) => {
+  const dayArr = dayinfo.split(" ");
+  return `${dayArr[0]}년 ${dayArr[1]}월 ${dayArr[2]}일`;
 };
 
 export default Today;

@@ -8,4 +8,10 @@ export const CardListWrapper = styled.div`
   gap: 3.5%;
 `;
 
-export const PlanContent = styled.div``;
+export const DayInfo = styled.div`
+  text-align: left;
+  margin-left: 20%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-size: 25px;
+`;
