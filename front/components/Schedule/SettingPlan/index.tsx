@@ -45,7 +45,7 @@ const SettingPlan = () => {
       {Array.from({ length: planFormNum }, () => null).map((value, index) => (
         <PlanForm key={index} dayInfo={String(DayInfo)} />
       ))}
-      <div>
+      <div style={{ marginBottom: "100px" }}>
         <Button variant="contained" color="primary" size="small" startIcon={<SaveIcon />} onClick={submitPlanComplete}>
           등록완료
         </Button>

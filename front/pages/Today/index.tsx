@@ -1,19 +1,21 @@
 import React, { useEffect, VFC } from "react";
-import TopLayOut from "../components/LayOut/TopLayOut";
-import BottomLayout from "../components/LayOut/BottomLayOut";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import { useRouter } from "next/router";
 import AlarmOffIcon from "@material-ui/icons/AlarmOff";
-
-import { useUserInfoQuery } from "../_Query/user";
-import { useGetToday } from "../_Query/today";
-import PlanList from "../components/PlanList";
+import TopLayOut from "../../components/LayOut/TopLayOut";
+import BottomLayout from "../../components/LayOut/BottomLayOut";
+import PlanCard from "../../components/TodayPage/PlanCard";
+import { useUserInfoQuery } from "../../_Query/user";
+import { useGetToday } from "../../_Query/today";
+import { CardListWrapper } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
   TodayWrapper: {
     textAlign: "center",
     marginTop: "30px",
+    marginBottom: "100px",
   },
   icon: {
     color: "#f48fb1",
@@ -65,7 +67,7 @@ const Today: VFC = () => {
               <div className={classes.noScheduleComment}>아직 오늘 일정이 없습니다</div>
             </div>
           )}
-          {TodayData?.Plans && TodayData?.Plans.map((plan, index) => <PlanList key={index} plan={plan} />)}
+          <CardListWrapper>{TodayData?.Plans && TodayData?.Plans.map((plan, index) => <PlanCard key={index} plan={plan} />)}</CardListWrapper>
         </div>
       )}
       <BottomLayout value={"today"}></BottomLayout>

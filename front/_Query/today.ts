@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getTodayAPI, deleteTodayPlanAPI } from "../API/today";
+import { getTodayAPI, deleteTodayPlanAPI, submitTodayPlanAPI } from "../API/today";
 import { TodayPlan } from "../Types/today";
 
 export const useGetToday = () =>
@@ -9,19 +9,34 @@ export const useGetToday = () =>
     refetchOnMount: false,
   });
 
+export const useSubmitPlanMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(submitTodayPlanAPI, {
+    onSuccess: (value, data) => {
+      queryClient.setQueryData<TodayPlan>("today", (prevData: any) => {
+        let newData = prevData;
+        console.log(newData);
+        const findIdx = prevData?.Plans.findIndex((plan: any) => plan?.id === data.id);
+        console.log(String(data.endTime));
+        newData.Plans[findIdx].endtime = data.endTime;
+        newData.Plans[findIdx].starttime = data.startTime;
+        newData.Plans[findIdx].totaltime = data.totaltime;
+        console.log(newData);
+        return newData;
+      });
+    },
+  });
+};
+
 export const useDeletePlanMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(deleteTodayPlanAPI, {
     onSuccess: (response) => {
-      console.log(response);
-      console.log(queryClient.getQueryData("today"));
       queryClient.setQueryData<TodayPlan>("today", (prevData: any) => {
-        console.log(prevData);
         let newData = prevData;
-        newData?.Plans?.filter((plan: any) => plan?.id !== response);
+        newData.Plans = newData?.Plans?.filter((plan: any) => plan?.id !== response);
         return newData;
       });
-      console.log(queryClient.getQueryData("today"));
     },
   });
 };

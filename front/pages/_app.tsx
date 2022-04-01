@@ -3,6 +3,7 @@ import Head from "next/head"; //Head component
 import "../styles.css";
 import { AppProps } from "next/app";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot } from "recoil";
 
 const RecordMyDay = ({ Component, pageProps }: AppProps) => {
@@ -17,6 +18,7 @@ const RecordMyDay = ({ Component, pageProps }: AppProps) => {
               <title>RecordMyDay</title>
             </Head>
             <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
           </Hydrate>
         </QueryClientProvider>
       </RecoilRoot>

@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { makeStyles } from "@material-ui/core/styles";
-import Chip from "@material-ui/core/Chip";
 import AlarmOnIcon from "@material-ui/icons/AlarmOn";
-import { Plan } from "../../Types/today";
-import { useDeletePlanMutation } from "../../_Query/today";
-import { PlanCard } from "./styles";
+import { Plan } from "../../../Types/today";
+import { useDeletePlanMutation, useSubmitPlanMutation } from "../../../_Query/today";
+import { PlanCardRoot, PlanContent } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,18 +42,12 @@ interface Props {
   plan: Plan;
 }
 
-const PlanList = ({ plan }: Props) => {
+const PlanCard = ({ plan }: Props) => {
   const classes = useStyles();
   const [startTime, setStartTime] = useState(plan.starttime);
   const [endTime, setEndTime] = useState(plan.endtime);
   const deletePlanMutation = useDeletePlanMutation();
-  // const {deletePlanDone} = useSelector((state)=>state.plan);
-
-  // useEffect(()=>{
-  //     if(deletePlanDone){
-  //         Router.push('/Today');
-  //     }
-  // },[deletePlanDone])
+  const submitPlanMutation = useSubmitPlanMutation();
 
   const onChangeStartTime = useCallback(
     (date) => {
@@ -87,12 +80,14 @@ const PlanList = ({ plan }: Props) => {
         }
       }
     }
-    // return dispatch({
-    //     type: SUBMIT_TIME_REQUEST,
-    //     data: {
-    //         startTime, endTime, totaltime, id
-    //     }
-    // })
+    const id = plan.id;
+    const reqData = {
+      id,
+      startTime,
+      endTime,
+      totaltime,
+    };
+    submitPlanMutation.mutate(reqData);
   }, [startTime, endTime]);
 
   const onClickDelete = useCallback(() => {
@@ -101,18 +96,14 @@ const PlanList = ({ plan }: Props) => {
 
   return (
     <>
-      <PlanCard>
-        {plan.totaltime ? (
-          <Chip label={plan.content} className={classes.root} color="primary" variant="outlined" />
-        ) : (
-          <Chip label={plan.content} className={classes.root} variant="outlined" />
-        )}
+      <PlanCardRoot>
+        <PlanContent>{plan.content}</PlanContent>
         <div>
-          {plan.endtime ? (
+          {plan.endtime && plan.totaltime ? (
             <div className={classes.totlatimeDiv}>
               <AlarmOnIcon className={classes.clearIcon} />
               <div>
-                수행시간 : {Math.floor(plan.totaltime / 60)}시간 {plan.totaltime % 60}분
+                수행시간 : {Math.floor(plan?.totaltime / 60)}시간 {plan?.totaltime % 60}분
               </div>
             </div>
           ) : (
@@ -154,9 +145,9 @@ const PlanList = ({ plan }: Props) => {
             </Button>
           </>
         )}
-      </PlanCard>
+      </PlanCardRoot>
     </>
   );
 };
 
-export default PlanList;
+export default PlanCard;

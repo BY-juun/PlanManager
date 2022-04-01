@@ -10,8 +10,8 @@ export interface TodayPlan {
 export interface Plan {
   DayId: number;
   content: string;
-  endtime: null | any;
-  starttime: null | any;
-  totaltime: null | any;
+  endtime: null | Date;
+  starttime: null | Date;
+  totaltime: null | number;
   id: number;
 }
