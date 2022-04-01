@@ -5,7 +5,7 @@ import { UserInfo } from "../Types/user";
 export const useUserInfoQuery = () =>
   useQuery<UserInfo>("userInfo", () => getMyInfoAPI(), {
     refetchOnWindowFocus: false,
-    staleTime: 5000,
+    staleTime: Infinity,
     refetchOnMount: false,
   });
 

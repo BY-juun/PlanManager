@@ -8,6 +8,7 @@ export const BottomLayOutWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  background: white;
 `;
 
 export const BottomLayOutItem = styled.div`
