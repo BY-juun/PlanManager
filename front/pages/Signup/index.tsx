@@ -1,20 +1,23 @@
-import TopLayOut from "../components/LayOut/TopLayOut";
-import BottomLayout from "../components/LayOut/BottomLayOut";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import TopLayOut from "../../components/LayOut/TopLayOut";
+import BottomLayout from "../../components/LayOut/BottomLayOut";
+import KakaoLogin from "../../public/KakaoLogin.png";
+import GoogleLogin from "../../public/GoogleLogin.png";
+import NaverLogin from "../../public/NaverLogin.png";
 import { makeStyles } from "@material-ui/core/styles";
-import useInput from "../hooks/useInput";
+import useInput from "../../hooks/useInput";
 import React, { useCallback, useState } from "react";
-import { RiKakaoTalkLine } from "react-icons/ri";
-import { AiOutlineFacebook, AiOutlineGoogle } from "react-icons/ai";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { backUrl } from "../config/config";
-import { getMyInfoAPI, signUpApi } from "../API/users";
+import { backUrl } from "../../config/config";
+import { getMyInfoAPI, signUpApi } from "../../API/users";
 import { GetServerSidePropsContext } from "next";
 import { useMutation } from "react-query";
+import { Input, InputDescription } from "../Login/styles";
+import Link from "next/link";
+import Image from "next/image";
+import { ErrorMesssage, SignUpBottomWrapper, SignUpBtn, SingUpWrapper } from "./styles";
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -35,9 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputField: {
     width: "200px",
-  },
-  warningMessage: {
-    color: "red",
   },
   snackbar: {
     marginBottom: "70px",
@@ -112,74 +112,31 @@ const signup = () => {
   return (
     <>
       <TopLayOut />
-      <div className={classes.mainWrapper}>
+      <SingUpWrapper>
         <form onSubmit={onSubmitForm}>
-          <div className={classes.inputWrapper}>
-            <TextField label="Email" value={email} required onChange={onChangeEmail} className={classes.inputField}></TextField>
-          </div>
-          <div className={classes.inputWrapper}>
-            <TextField label="Nickname" value={nickname} required onChange={onChangeNickname} className={classes.inputField}></TextField>
-          </div>
-          <div className={classes.inputWrapper}>
-            <TextField label="Password" type="password" value={password} required onChange={onChangePassword} className={classes.inputField}></TextField>
-          </div>
-          <div className={classes.inputWrapper}>
-            <TextField
-              label="PasswordCheck"
-              type="password"
-              value={passwordCheck}
-              required
-              onChange={onChangePasswordCheck}
-              className={classes.inputField}
-            ></TextField>
-          </div>
-          {passwordError && <div className={classes.warningMessage}>비밀번호가 일치하지 않습니다.</div>}
-          <div className={classes.inputWrapper}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField}>
-              SignUp
-            </Button>
-          </div>
+          <InputDescription>ID(이메일주소)</InputDescription>
+          <Input value={email} onChange={onChangeEmail} />
+          <InputDescription>닉네임</InputDescription>
+          <Input value={nickname} onChange={onChangeNickname} />
+          <InputDescription>비밀번호</InputDescription>
+          <Input value={password} onChange={onChangePassword} type="password" />
+          <InputDescription>비밀번호확인</InputDescription>
+          <Input value={passwordCheck} onChange={onChangePasswordCheck} type="password" />
+          {passwordError && <ErrorMesssage>비밀번호가 일치하지 않습니다.</ErrorMesssage>}
+          <SignUpBtn>회원가입</SignUpBtn>
         </form>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/kakao`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<RiKakaoTalkLine />}
-          >
-            카카오톡 회원가입
-          </Button>
-        </div>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/facebook`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<AiOutlineFacebook />}
-          >
-            페이스북 회원가입
-          </Button>
-        </div>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/google`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<AiOutlineGoogle />}
-          >
-            구글 회원가입
-          </Button>
-        </div>
-      </div>
+        <SignUpBottomWrapper>
+          <Link href={`${backUrl}/user/kakao`}>
+            <Image src={KakaoLogin} width={30} height={30} />
+          </Link>
+          <Link href={`${backUrl}/user/google`}>
+            <Image src={GoogleLogin} width={30} height={30} />
+          </Link>
+          <Link href={`${backUrl}/user/facebook`}>
+            <Image src={NaverLogin} width={30} height={30} />
+          </Link>
+        </SignUpBottomWrapper>
+      </SingUpWrapper>
       <Snackbar open={isError} autoHideDuration={2000} className={classes.snackbar} onClose={handleClose}>
         <Alert severity="error" onClose={handleClose}>
           {errorMessage}

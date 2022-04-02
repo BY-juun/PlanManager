@@ -4,37 +4,20 @@ import { MuiPickersUtilsProvider, KeyboardTimePicker } from "@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns";
 import { makeStyles } from "@material-ui/core/styles";
 import AlarmOnIcon from "@material-ui/icons/AlarmOn";
-import { Plan } from "../../../Types/today";
 import { useDeletePlanMutation, useSubmitPlanMutation } from "../../../_Query/today";
-import { PlanCardRoot, PlanContent } from "./styles";
+import { BtnWrapper, DeleteBtn, ExecutionTime, PlanCardRoot, PlanContent, SubmitBtn } from "./styles";
+import { Plan } from "../../../Types/common";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: "15px",
-  },
   timepicker: {
-    width: "140px",
-    marginLeft: "10px",
-    marginRight: "10px",
-  },
-  button: {
-    marginTop: "15px",
-    marginBottom: "15px",
-    marginLeft: "15px",
-    marginRight: "15px",
-  },
-  chip: {
-    marginLeft: "80px",
+    width: "100%",
   },
   totlatimeDiv: {
     marginTop: "10px",
-    marginBottom: "20px",
+    marginBottom: "10px",
   },
   clearIcon: {
     color: "#3f51b5",
-  },
-  snackbar: {
-    marginBottom: "70px",
   },
 }));
 
@@ -102,9 +85,9 @@ const PlanCard = ({ plan }: Props) => {
           {plan.endtime && plan.totaltime ? (
             <div className={classes.totlatimeDiv}>
               <AlarmOnIcon className={classes.clearIcon} />
-              <div>
+              <ExecutionTime>
                 수행시간 : {Math.floor(plan?.totaltime / 60)}시간 {plan?.totaltime % 60}분
-              </div>
+              </ExecutionTime>
             </div>
           ) : (
             <>
@@ -136,14 +119,10 @@ const PlanCard = ({ plan }: Props) => {
           )}
         </div>
         {plan.starttime && plan.endtime && plan.totaltime ? null : (
-          <>
-            <Button variant="outlined" color="secondary" className={classes.button} onClick={onClickDelete}>
-              삭제
-            </Button>
-            <Button variant="outlined" color="primary" className={classes.button} onClick={submitTime}>
-              제출
-            </Button>
-          </>
+          <BtnWrapper>
+            <DeleteBtn onClick={onClickDelete}>삭제</DeleteBtn>
+            <SubmitBtn onClick={submitTime}>제출</SubmitBtn>
+          </BtnWrapper>
         )}
       </PlanCardRoot>
     </>

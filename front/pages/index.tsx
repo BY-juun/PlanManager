@@ -2,30 +2,24 @@ import React from "react";
 import Image from "next/image";
 import TopLayOut from "../components/LayOut/TopLayOut";
 import BottomLayout from "../components/LayOut/BottomLayOut";
-import todolist from "../public/todolist.png";
+import MainLogo from "../public/MainLogo.png";
 import { useUserInfoQuery } from "../_Query/user";
-import { makeStyles } from "@material-ui/core/styles";
 import ButtonSet from "../components/MainPage/ButtonSet";
-
-const useStyles = makeStyles((theme) => ({
-  mainWrapper: {
-    textAlign: "center",
-    marginTop: "130px",
-  },
-}));
+import { MainTitleWrapper, MainWrapper } from "./styles";
 
 const Home = () => {
-  const classes = useStyles();
-
   const { data: UserData } = useUserInfoQuery();
 
   return (
     <>
       <TopLayOut />
-      <div className={classes.mainWrapper}>
-        <Image src={todolist} alt="Picture of the author" width={100} height={100} />
+      <MainWrapper>
+        <MainTitleWrapper>
+          <Image src={MainLogo} alt="Picture of the author" width={30} height={30} />
+          <div>TODO APP</div>
+        </MainTitleWrapper>
         <ButtonSet mode={UserData ? true : false} />
-      </div>
+      </MainWrapper>
       <BottomLayout value={null}></BottomLayout>
     </>
   );

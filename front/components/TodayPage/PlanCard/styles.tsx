@@ -7,9 +7,43 @@ export const PlanCardRoot = styled.div`
   width: 44%;
   margin-bottom: 20px;
   padding: 20px;
+  width: 100%;
 `;
 
 export const PlanContent = styled.div`
   background: #f5f5f5;
   padding: 10px 0;
+  font-size: 15px;
+`;
+
+export const ExecutionTime = styled.div`
+  font-size: 12px;
+`;
+
+export const BtnWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  gap: 2%;
+`;
+
+export const DeleteBtn = styled.button`
+  cursor: pointer;
+  border: 1px solid #ff7373;
+  background: white;
+  color: #ff7373;
+  border-radius: 4px;
+  padding: 10px 15px;
+  width: 49%;
+`;
+
+export const SubmitBtn = styled.button`
+  cursor: pointer;
+  border: 1px solid #006cc6;
+  background: white;
+  color: #006cc6;
+  border-radius: 4px;
+  padding: 10px 15px;
+  width: 49%;
 `;

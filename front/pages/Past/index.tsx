@@ -8,13 +8,13 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import { makeStyles } from "@material-ui/core/styles";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import Button from "@material-ui/core/Button";
-//import PastPlanList from "../components/PastPlanList";
 import { useRouter } from "next/router";
 import { useUserInfoQuery } from "../../_Query/user";
 import { useGetPast } from "../../_Query/past";
 import { makeDateForm } from "../../util/makeDateForm";
 import PastPlanCard from "../../components/PastPlanCard";
 import { PastPlan } from "../../Types/past";
+import { PastListWrapper } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
   mainwrraper: {
@@ -51,8 +51,7 @@ const past: VFC = () => {
   const { data: UserData, isLoading: UserLoading } = useUserInfoQuery();
   const [selectedFromDate, setSelectedFromDate] = useState(null);
   const [selectedToDate, setSelectedToDate] = useState(null);
-  const [date1, setDate1] = useState(false);
-  const [date2, setDate2] = useState(false);
+
   const [FromdayInfo, setFromdayInfo] = useState<string | null>(null);
   const [TodayInfo, setTodayInfo] = useState<string | null>(null);
   const { data: pastPlan, isLoading: pastPlanLoading } = useGetPast({ FromdayInfo: FromdayInfo, TodayInfo: TodayInfo });
@@ -140,11 +139,11 @@ const past: VFC = () => {
               </div>
             </div>
           ) : (
-            <div className={classes.pastListWrapper}>
+            <PastListWrapper>
               {pastPlan.map((plan: PastPlan, index: number) => (
                 <PastPlanCard key={index} dayinfo={plan.dayinfo} planList={plan.Plans} />
               ))}
-            </div>
+            </PastListWrapper>
           )}
         </>
       )}

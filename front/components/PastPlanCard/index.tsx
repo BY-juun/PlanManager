@@ -12,32 +12,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import AddAlarmIcon from "@material-ui/icons/AddAlarm";
 import { Plan } from "../../Types/common";
+import { DayTitle, PastPlanWrapper } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    marginBottom: "56px",
-    marginLeft: "20px",
-    marginRight: "20px",
-    border: "1px solid grey",
-    borderRadius: "15px",
-    padding: "10px",
-  },
-  plan: {
-    marginTop: "10px",
-    marginBottom: "10px",
-    color: "black",
-    textAlign: "center",
-  },
   icon: {
     color: "#3f51b5",
     verticalAlign: "middle",
+    marginRight: "10px",
     marginBottom: "3px",
-  },
-  span: {
-    marginRight: "50px",
-  },
-  chip: {
-    marginBottom: "15px",
   },
   totalTimediv: {
     marginTop: "20px",
@@ -66,40 +48,49 @@ const PastPlanCard = ({ dayinfo, planList }: Props) => {
   }, [planList]);
 
   return (
-    <div className={classes.wrapper}>
-      <Chip label={dayinfo} color="primary" variant="outlined" className={classes.chip} />
-      {/* <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>계획</TableCell>
-              <TableCell align="left">시간</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {planList &&
-              planList.map((value, index) => (
-                <TableRow key={index}>
-                  <TableCell align="left">
-                    <ListAltOutlinedIcon className={classes.icon} />
-                    {value.content}
-                  </TableCell>
-                  <TableCell align="left">
-                    <ScheduleIcon className={classes.icon} />
-                    {Math.floor(value.totaltime / 60)}시간 {value.totaltime % 60}분
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+    <PastPlanWrapper>
+      <DayTitle>{makeDateToString(dayinfo)}</DayTitle>
+      {planList?.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>계획</TableCell>
+                <TableCell align="left">시간</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {planList &&
+                planList.map((value, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="left">
+                      <ListAltOutlinedIcon className={classes.icon} />
+                      {value?.content}
+                    </TableCell>
+                    <TableCell align="left">
+                      <ScheduleIcon className={classes.icon} />
+                      {value?.totaltime ? Math.floor(value?.totaltime / 60) + "시간" + (value.totaltime % 60) + "분" : "0"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        "계획이 없습니다"
+      )}
       {totaltime ? (
         <div className={classes.totalTimediv}>
           <AddAlarmIcon className={classes.icon} /> 총 시간 : {Math.floor(totaltime / 60)}시간 {totaltime % 60}분
         </div>
       ) : null}
-    </div>
+    </PastPlanWrapper>
   );
+};
+
+const makeDateToString = (dayinfo: number) => {
+  let returnDate = String(dayinfo);
+  return `${returnDate.substring(0, 4)}년 ${returnDate.substring(4, 6)}월 ${returnDate.substring(6, 8)}일`;
 };
 
 export default PastPlanCard;

@@ -47,7 +47,7 @@ const BottomLayout = ({ value }: Props) => {
   }, []);
 
   const onClickLogin = useCallback(() => {
-    router.push("/login");
+    router.push("/Login");
   }, []);
 
   const { data: UserData } = useQuery("myInfo", () => getMyInfoAPI());

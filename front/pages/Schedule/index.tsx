@@ -1,17 +1,17 @@
-import TopLayOut from "../components/LayOut/TopLayOut";
-import BottomLayout from "../components/LayOut/BottomLayOut";
+import TopLayOut from "../../components/LayOut/TopLayOut";
+import BottomLayout from "../../components/LayOut/BottomLayOut";
 import "date-fns";
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
-import { useUserInfoQuery } from "../_Query/user";
-import { 계획_설정하기, 날짜_설정하기, 설정_완료 } from "../util/constant";
-import ScheduleStepper from "../components/Schedule/ScheduleStepper";
-import PickDate from "../components/Schedule/PickDate";
-import SettingPlan from "../components/Schedule/SettingPlan";
+import { useUserInfoQuery } from "../../_Query/user";
+import { 계획_설정하기, 날짜_설정하기, 설정_완료 } from "../../util/constant";
+import ScheduleStepper from "../../components/Schedule/ScheduleStepper";
+import PickDate from "../../components/Schedule/PickDate";
+import SettingPlan from "../../components/Schedule/SettingPlan";
 import { useRecoilValue } from "recoil";
-import { ActiveStep } from "../_Recoil/schedule";
-import Complete from "../components/Schedule/Complete";
+import { ActiveStep } from "../../_Recoil/schedule";
+import Complete from "../../components/Schedule/Complete";
 
 const useStyles = makeStyles((theme) => ({
   mainWrapper: {

@@ -1,36 +1,26 @@
-import TopLayOut from "../components/LayOut/TopLayOut";
-import BottomLayout from "../components/LayOut/BottomLayOut";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import TopLayOut from "../../components/LayOut/TopLayOut";
+import BottomLayout from "../../components/LayOut/BottomLayOut";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback, useRef, useState } from "react";
-import { RiKakaoTalkLine } from "react-icons/ri";
-import { AiOutlineFacebook, AiOutlineGoogle } from "react-icons/ai";
+import KakaoLogin from "../../public/KakaoLogin.png";
+import GoogleLogin from "../../public/GoogleLogin.png";
+import NaverLogin from "../../public/NaverLogin.png";
 import { useRouter } from "next/router";
 import { Snackbar } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
-import { backUrl } from "../config/config";
+import { backUrl } from "../../config/config";
 import { GetServerSidePropsContext } from "next";
-import { getMyInfoAPI, loginAPI } from "../API/users";
-import { useMutation, useQueryClient } from "react-query";
-import { useLoginMutation } from "../_Query/user";
+import { getMyInfoAPI } from "../../API/users";
+import { useLoginMutation } from "../../_Query/user";
+import { FindIdPassword, Input, InputDescription, LoginBottomWrapper, LoginBtn, LoginWrapper, SocialBtnWrapper } from "./styles";
+import Image from "next/image";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
-  mainWrapper: {
-    textAlign: "center",
-    marginTop: "150px",
-  },
   wrapper: {
     marginTop: "15px",
     marginBottom: "15px",
-  },
-  inputWrapper: {
-    marginTop: "17px",
-    marginBottom: "15px",
-  },
-  inputField: {
-    width: "200px",
   },
   snackbar: {
     marginBottom: "70px",
@@ -56,9 +46,7 @@ const login = () => {
       return;
     }
     alert(`환엽합니다 ${data?.nickname}님`);
-    setTimeout(() => {
-      router.push("/");
-    }, 500);
+    router.push("/");
   }, []);
 
   const loginMutation = useLoginMutation(LoginSuccess);
@@ -85,65 +73,40 @@ const login = () => {
   return (
     <>
       <TopLayOut />
-      <div className={classes.mainWrapper}>
+      <LoginWrapper>
         <form onSubmit={onSubmitForm}>
           <div className={classes.wrapper}>
-            <TextField label="Email" inputRef={emailRef} className={classes.inputField}></TextField>
+            <InputDescription>ID(이메일주소)</InputDescription>
+            <Input ref={emailRef} />
           </div>
           <div className={classes.wrapper}>
-            <TextField label="Password" inputRef={passwordRef} type="password" className={classes.inputField}></TextField>
+            <InputDescription>비밀번호</InputDescription>
+            <Input ref={passwordRef} />
           </div>
           <div className={classes.wrapper}>
-            <Button variant="outlined" size="medium" color="primary" type="submit" className={classes.inputField}>
-              Login
-            </Button>
+            <LoginBtn>로그인</LoginBtn>
           </div>
         </form>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/kakao`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<RiKakaoTalkLine />}
-          >
-            카카오톡 로그인
-          </Button>
-        </div>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/facebook`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<AiOutlineFacebook />}
-          >
-            페이스북 로그인
-          </Button>
-        </div>
-        <div className={classes.inputWrapper}>
-          <Button
-            href={`${backUrl}/user/google`}
-            variant="outlined"
-            size="medium"
-            color="primary"
-            type="submit"
-            className={classes.inputField}
-            startIcon={<AiOutlineGoogle />}
-          >
-            구글 로그인
-          </Button>
-        </div>
+        <LoginBottomWrapper>
+          <FindIdPassword>아이디/비밀번호 찾기</FindIdPassword>
+          <SocialBtnWrapper>
+            <Link href={`${backUrl}/user/kakao`}>
+              <Image src={KakaoLogin} width={30} height={30} />
+            </Link>
+            <Link href={`${backUrl}/user/google`}>
+              <Image src={GoogleLogin} width={30} height={30} />
+            </Link>
+            <Link href={`${backUrl}/user/facebook`}>
+              <Image src={NaverLogin} width={30} height={30} />
+            </Link>
+          </SocialBtnWrapper>
+        </LoginBottomWrapper>
         <Snackbar open={isError} autoHideDuration={3000} onClose={handleClose} className={classes.snackbar}>
           <Alert onClose={handleClose} severity="error">
             {errorMessage}
           </Alert>
         </Snackbar>
-      </div>
+      </LoginWrapper>
       <BottomLayout value={"login"}></BottomLayout>
     </>
   );
