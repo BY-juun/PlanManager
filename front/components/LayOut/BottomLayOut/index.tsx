@@ -30,7 +30,7 @@ const BottomLayout = ({ value }: Props) => {
   const logoutMutation = useLogoutMutation();
 
   const gotoHistory = useCallback(() => {
-    router.push("/past");
+    router.push("/Past");
   }, []);
 
   const gotoToday = useCallback(() => {

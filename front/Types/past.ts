@@ -1,10 +1,10 @@
 import { Plan } from "./common";
 
-export interface TodayPlan {
+export interface PastPlan {
   UserId: number;
   createdAt: string;
   dayinfo: number;
   id: number;
   updatedAt: string;
-  Plans: Array<Plan>;
+  Plans: Array<Plan | null>;
 }
