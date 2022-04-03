@@ -29,7 +29,6 @@ const PickDate = () => {
   }, []);
 
   const AddScheduleFailureFunction = useCallback((data) => {
-    console.log(data);
     if (data) {
       alert("*해당 날짜에 이미 계획이 존재합니다");
     }

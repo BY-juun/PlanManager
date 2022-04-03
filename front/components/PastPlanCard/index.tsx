@@ -35,9 +35,6 @@ interface Props {
 const PastPlanCard = ({ dayinfo, planList }: Props) => {
   const classes = useStyles();
   const [totaltime, setTotaltime] = useState(0);
-  console.log(dayinfo);
-  console.log(planList);
-
   useEffect(() => {
     if (planList && planList?.length > 0) {
       setTotaltime(0);

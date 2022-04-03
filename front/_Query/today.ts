@@ -17,7 +17,6 @@ export const useSubmitPlanMutation = () => {
       queryClient.setQueryData<TodayPlan>("today", (prevData: any) => {
         let newData = prevData;
         const findIdx = prevData?.Plans.findIndex((plan: any) => plan?.id === data.id);
-        console.log(String(data.endTime));
         newData.Plans[findIdx].endtime = data.endTime;
         newData.Plans[findIdx].starttime = data.startTime;
         newData.Plans[findIdx].totaltime = data.totaltime;

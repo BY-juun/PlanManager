@@ -22,6 +22,5 @@ export const submitTodayPlanAPI = async (reqData: SubmitProps) => {
 
 export const deleteTodayPlanAPI = async (id: number) => {
   const { data } = await axios.delete(`/plan/${id}`);
-  console.log(data);
   return data;
 };

@@ -48,8 +48,6 @@ const Today: VFC = () => {
     }
   }, [UserData, UserLoading]);
 
-  console.log(todayLoading);
-
   return (
     <>
       <TopLayOut />
