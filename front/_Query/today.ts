@@ -7,6 +7,7 @@ export const useGetToday = () =>
     refetchOnWindowFocus: false,
     staleTime: Infinity,
     refetchOnMount: false,
+    retry: false,
   });
 
 export const useSubmitPlanMutation = () => {

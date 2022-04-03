@@ -37,7 +37,7 @@ export const LoginBottomWrapper = styled.div`
   width: 100%;
 `;
 
-export const FindIdPassword = styled.div`
+export const GotoSignUp = styled.div`
   font-size: 12px;
   color: #c8c8c8;
 `;

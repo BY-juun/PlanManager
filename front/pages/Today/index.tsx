@@ -42,11 +42,13 @@ const Today: VFC = () => {
   useEffect(() => {
     if (!UserLoading) {
       if (!UserData) {
-        alert("로그인 후 이용가능합니다");
+        alert("*로그인 후 이용가능합니다");
         router.push("/");
       }
     }
   }, [UserData, UserLoading]);
+
+  console.log(todayLoading);
 
   return (
     <>

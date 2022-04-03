@@ -73,11 +73,11 @@ const past: VFC = () => {
     if (!selectedFromDate || !selectedToDate) {
       setSelectedFromDate(null);
       setSelectedToDate(null);
-      return alert("기간을 설정하셔야 합니다");
+      return alert("*기간을 설정하셔야 합니다");
     } else if (selectedFromDate >= selectedToDate) {
       setSelectedFromDate(null);
       setSelectedToDate(null);
-      return alert("기간 설정이 잘못되어있습니다");
+      return alert("*기간 설정이 잘못되어있습니다");
     } else {
       setFromdayInfo(makeDateForm(selectedFromDate));
       setTodayInfo(makeDateForm(selectedToDate));
@@ -87,7 +87,7 @@ const past: VFC = () => {
   useEffect(() => {
     if (!UserLoading) {
       if (!UserData) {
-        alert("로그인 후 이용가능합니다");
+        alert("*로그인 후 이용가능합니다");
         router.push("/");
       }
     }

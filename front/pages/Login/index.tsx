@@ -13,7 +13,7 @@ import { backUrl } from "../../config/config";
 import { GetServerSidePropsContext } from "next";
 import { getMyInfoAPI } from "../../API/users";
 import { useLoginMutation } from "../../_Query/user";
-import { FindIdPassword, Input, InputDescription, LoginBottomWrapper, LoginBtn, LoginWrapper, SocialBtnWrapper } from "./styles";
+import { GotoSignUp, Input, InputDescription, LoginBottomWrapper, LoginBtn, LoginWrapper, SocialBtnWrapper } from "./styles";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -45,7 +45,7 @@ const login = () => {
       setErrorMessage(data.data);
       return;
     }
-    alert(`환엽합니다 ${data?.nickname}님`);
+    alert(`*환엽합니다 ${data?.nickname}님`);
     router.push("/");
   }, []);
 
@@ -81,14 +81,14 @@ const login = () => {
           </div>
           <div className={classes.wrapper}>
             <InputDescription>비밀번호</InputDescription>
-            <Input ref={passwordRef} />
+            <Input ref={passwordRef} type="password" />
           </div>
           <div className={classes.wrapper}>
             <LoginBtn>로그인</LoginBtn>
           </div>
         </form>
         <LoginBottomWrapper>
-          <FindIdPassword>아이디/비밀번호 찾기</FindIdPassword>
+          <GotoSignUp>회원가입</GotoSignUp>
           <SocialBtnWrapper>
             <Link href={`${backUrl}/user/kakao`}>
               <Image src={KakaoLogin} width={30} height={30} />

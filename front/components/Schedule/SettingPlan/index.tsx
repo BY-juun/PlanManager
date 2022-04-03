@@ -16,7 +16,7 @@ const SettingPlan = () => {
 
   const submitPlanComplete = useCallback(() => {
     if (planFormNum !== completePlanFormNum) {
-      alert("아직 등록하지 않은 계획이 있습니다");
+      alert("*아직 등록하지 않은 계획이 있습니다");
       return;
     }
     setActiveStep((prevStep) => prevStep + 1);
@@ -28,7 +28,7 @@ const SettingPlan = () => {
 
   const removeInput = useCallback(() => {
     if (planFormNum === 1) {
-      alert("1개 이상 작성해야합니다");
+      alert("*1개 이상 작성해야합니다");
       return;
     }
     setPlanFormNum((prevNum) => prevNum - 1);

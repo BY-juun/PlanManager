@@ -21,14 +21,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const makeTimeDiff = (startTime: Date | null, endTime: Date | null) => {
+  if (!(startTime && endTime)) return null;
+  return new Date(endTime).getHours() * 60 + new Date(endTime).getMinutes() - (new Date(startTime).getHours() * 60 + new Date(startTime).getMinutes());
+};
+
+const IsStartTimeOverEndTime = (startTime: Date | null, endTime: Date | null) => {
+  if (startTime && endTime) {
+    if (startTime > endTime) return true;
+  }
+  return false;
+};
+
 interface Props {
   plan: Plan;
 }
 
 const PlanCard = ({ plan }: Props) => {
   const classes = useStyles();
-  const [startTime, setStartTime] = useState(plan.starttime);
-  const [endTime, setEndTime] = useState(plan.endtime);
+  const [startTime, setStartTime] = useState<null | Date>(plan.starttime);
+  const [endTime, setEndTime] = useState<null | Date>(plan.endtime);
   const deletePlanMutation = useDeletePlanMutation();
   const submitPlanMutation = useSubmitPlanMutation();
 
@@ -48,20 +60,16 @@ const PlanCard = ({ plan }: Props) => {
 
   const submitTime = useCallback(() => {
     let totaltime = null;
-    if (startTime) {
-      if (endTime) {
-        if (startTime > endTime) {
-          setStartTime(plan.starttime);
-          setEndTime(plan.endtime);
-          alert("*시간 설정이 잘못되었습니다");
-          return;
-        }
-        totaltime =
-          new Date(endTime).getHours() * 60 + new Date(endTime).getMinutes() - (new Date(startTime).getHours() * 60 + new Date(startTime).getMinutes());
-        if (totaltime <= 0) {
-          alert("*시간은 오늘 24시 안으로 설정해주세요.");
-        }
-      }
+
+    if (IsStartTimeOverEndTime(startTime, endTime)) {
+      setStartTime(plan.starttime);
+      setEndTime(plan.endtime);
+      return alert("*시간 설정이 잘못되었습니다");
+    }
+
+    totaltime = makeTimeDiff(startTime, endTime);
+    if (totaltime && totaltime <= 0) {
+      return alert("*시간은 오늘 24시 안으로 설정해주세요.");
     }
     const id = plan.id;
     const reqData = {
@@ -75,7 +83,7 @@ const PlanCard = ({ plan }: Props) => {
 
   const onClickDelete = useCallback(() => {
     deletePlanMutation.mutate(plan.id);
-  }, [deletePlanMutation]);
+  }, [deletePlanMutation, plan]);
 
   return (
     <>

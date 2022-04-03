@@ -31,7 +31,7 @@ const PickDate = () => {
   const AddScheduleFailureFunction = useCallback((data) => {
     console.log(data);
     if (data) {
-      alert("해당 날짜에 이미 계획이 존재합니다");
+      alert("*해당 날짜에 이미 계획이 존재합니다");
     }
     setSelectedDate(null);
   }, []);
@@ -49,7 +49,7 @@ const PickDate = () => {
   const submitDate = useCallback(() => {
     if (!dayInfo) {
       setSelectedDate(null);
-      alert("날짜를 다시 설정해주세요");
+      alert("*날짜를 다시 설정해주세요");
       return;
     }
     addScheduleMutation.mutate(Number(dayInfo));

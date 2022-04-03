@@ -30,7 +30,7 @@ const Schedule = () => {
   useEffect(() => {
     if (!getUserInfoLoading) {
       if (!Userdata) {
-        alert("로그인한 유저만 이용 가능합니다");
+        alert("*로그인후 이용 가능합니다");
         router.push("/");
       }
     }
