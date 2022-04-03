@@ -1,4 +1,4 @@
-# RecordMyDay v0.0.1
+# RecordMyDay v1.0.0
 
 ## 🌟서비스소개
 <p align="center"><img src = "https://user-images.githubusercontent.com/78716842/132106130-0070f2ba-9eaf-4ffc-8503-f7e5783961e4.png" width = "250"></p> 
