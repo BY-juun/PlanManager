@@ -258,10 +258,53 @@ export const useDeletePlanMutation = () => {
 
 * 과거 페이지에 들어가게 되면, 사용자는 자신의 계획과 수행 시간을 보고 싶은 기간을 설정할 수 있습니다.
 
-<p align = "center"><img src = "https://user-images.githubusercontent.com/78716842/161423468-ee3715e3-b850-486f-95ac-99c563fc74b9.png" width = "250"></p>
+<p align = "center"><img src = "https://user-images.githubusercontent.com/78716842/192108183-49e0f87b-ce6b-40a8-bc24-d0b6914fd813.png" width = "250"></p>
 
 * 보고 싶은 기간을 설정해, 제출하면, BackEnd 서버에서는 해당 기간에 포함 된 날짜들을 계획을 포함해 가져옵니다.
 * 그 후, FrontEnd서버에 해당 데이터를 보내주면, FrontEnd 서버는 해당 데이터를 위 그림과 같은 컴포넌트의 배열로 화면에 보여주게 됩니다.
+* 데이터를 시각화해서 보여주기 위해, SVG를 활용해서 차트를 만들었다.
+* 각 데이터의 전체에 대한 퍼센티지를 구하고, 이를 바탕으로 SVG Element 안의 Circle Element를 집어 넣는 방식으로 차트를 그려주었다.
+
+```javascript
+const makeCircle = (data: PlanListDataPercent, chartWrapperRef: React.RefObject<HTMLDivElement>) => {
+  let filled = 1;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "100%");
+  svg.setAttribute("viewBox", "0 0 100 100");
+  if (!chartWrapperRef.current) return;
+  chartWrapperRef.current.innerHTML = "";
+  chartWrapperRef.current.appendChild(svg);
+  data.forEach((o, idx) => {
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const dashOffset = DASHARRAY - (DASHARRAY * o.percent) / 100;
+    const angle = (filled * 360) / 100 + START_ANGLE;
+    const currentDuration = (ANIMATION_DURATION * o.percent) / 100;
+    const delay = (ANIMATION_DURATION * filled) / 100;
+    const attributes = [
+      { type: "r", value: RADIUS },
+      { type: "cx", value: CX },
+      { type: "cy", value: CY },
+      { type: "fill", value: "transparent" },
+      { type: "stroke", value: COLORS[idx] },
+      { type: "stroke-width", value: STROKE_WIDTH },
+      { type: "stroke-dasharray", value: DASHARRAY },
+      { type: "stroke-dashoffset", value: DASHARRAY },
+      { type: "transform", value: `rotate (${angle} ${CX} ${CY})` },
+    ];
+    attributes.forEach(({ type, value }) => {
+      circle.setAttribute(type, String(value));
+    });
+    circle.style.transition = `stroke-dashoffset ${currentDuration}ms linear ${delay}ms`;
+    svg.appendChild(circle);
+
+    filled += o.percent;
+    setTimeout(function () {
+      circle.style.strokeDashoffset = String(dashOffset);
+    }, 100);
+  });
+};
+```
 
 
 ### V3에서 하고 싶은 것?
