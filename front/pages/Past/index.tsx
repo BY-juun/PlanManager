@@ -15,6 +15,7 @@ import { makeDateForm } from "../../util/makeDateForm";
 import PastPlanCard from "../../components/PastPlanCard";
 import { PastPlan } from "../../Types/past";
 import { PastListWrapper } from "./styles";
+import { useCheckLogin } from "../../hooks/useCheckLogin";
 
 const useStyles = makeStyles((theme) => ({
   mainwrraper: {
@@ -84,15 +85,8 @@ const past: VFC = () => {
     }
   }, [selectedFromDate, selectedToDate]);
 
-  useEffect(() => {
-    if (!UserLoading) {
-      if (!UserData) {
-        alert("*로그인 후 이용가능합니다");
-        router.push("/");
-      }
-    }
-  }, [UserData, UserLoading]);
-
+  useCheckLogin();
+  console.log(pastPlan);
   return (
     <>
       <TopLayOut />

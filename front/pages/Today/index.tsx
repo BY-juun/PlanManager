@@ -10,6 +10,7 @@ import PlanCard from "../../components/TodayPage/PlanCard";
 import { useUserInfoQuery } from "../../_Query/user";
 import { useGetToday } from "../../_Query/today";
 import { CardListWrapper, DayInfo } from "./styles";
+import { useCheckLogin } from "../../hooks/useCheckLogin";
 
 const useStyles = makeStyles((theme) => ({
   TodayWrapper: {
@@ -38,15 +39,7 @@ const Today: VFC = () => {
   const { data: TodayData, isLoading: todayLoading } = useGetToday();
 
   const dayinfo = String(today.getFullYear()) + " " + String(today.getMonth() + 1) + " " + String(today.getDate());
-
-  useEffect(() => {
-    if (!UserLoading) {
-      if (!UserData) {
-        alert("*로그인 후 이용가능합니다");
-        router.push("/");
-      }
-    }
-  }, [UserData, UserLoading]);
+  useCheckLogin();
 
   return (
     <>

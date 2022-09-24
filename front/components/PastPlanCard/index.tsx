@@ -13,6 +13,8 @@ import Paper from "@material-ui/core/Paper";
 import AddAlarmIcon from "@material-ui/icons/AddAlarm";
 import { Plan } from "../../Types/common";
 import { DayTitle, PastPlanWrapper } from "./styles";
+import Chart from "../Chart";
+import { COLORS } from "../../util/constant";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -47,6 +49,7 @@ const PastPlanCard = ({ dayinfo, planList }: Props) => {
   return (
     <PastPlanWrapper>
       <DayTitle>{makeDateToString(dayinfo)}</DayTitle>
+      <Chart planList={planList} />
       {planList?.length > 0 ? (
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
@@ -59,16 +62,19 @@ const PastPlanCard = ({ dayinfo, planList }: Props) => {
             <TableBody>
               {planList &&
                 planList.map((value, index) => (
-                  <TableRow key={index}>
-                    <TableCell align="left">
-                      <ListAltOutlinedIcon className={classes.icon} />
-                      {value?.content}
-                    </TableCell>
-                    <TableCell align="left">
-                      <ScheduleIcon className={classes.icon} />
-                      {value?.totaltime ? Math.floor(value?.totaltime / 60) + "시간" + (value.totaltime % 60) + "분" : "0"}
-                    </TableCell>
-                  </TableRow>
+                  <>
+                    <TableRow key={index}>
+                      <TableCell align="left">
+                        <ListAltOutlinedIcon className={classes.icon} />
+                        {console.log(COLORS[index])}
+                        <div style={{ color: `${COLORS[index]}` }}>{value?.content}</div>
+                      </TableCell>
+                      <TableCell align="left">
+                        <ScheduleIcon className={classes.icon} />
+                        {value?.totaltime ? Math.floor(value?.totaltime / 60) + "시간" + (value.totaltime % 60) + "분" : "0"}
+                      </TableCell>
+                    </TableRow>
+                  </>
                 ))}
             </TableBody>
           </Table>

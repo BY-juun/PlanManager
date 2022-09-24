@@ -18,7 +18,7 @@ const RecordMyDay = ({ Component, pageProps }: AppProps) => {
               <title>RecordMyDay</title>
             </Head>
             <Component {...pageProps} />
-            <ReactQueryDevtools initialIsOpen={false} />
+            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </Hydrate>
         </QueryClientProvider>
       </RecoilRoot>
